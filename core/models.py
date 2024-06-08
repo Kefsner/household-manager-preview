@@ -8,7 +8,8 @@ class LogSystem(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     exception = models.CharField(max_length=255)
     request = models.TextField()
-    traceback = models.TextField()
+    traceback = models.TextField(null=True)
+    data = models.TextField(null=True)
 
 class MetaData(models.Model):
     id = models.AutoField(primary_key=True)

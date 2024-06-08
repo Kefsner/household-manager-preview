@@ -1,6 +1,46 @@
 {% extends "base/base.html" %}
 
+{% load static %}
+
+{% block title %}
+    Home
+{% endblock %}
+
 {% block content %}
+<h1>Home</h1>
+<p>Welcome, {{ user.username }}! Here you have an overview of your household finances.</p>
 <p>Total Balance: R$ {{ balance_sum }}</p>
-<p>Next credit card bill: R$ {{ credit_card_sum }}</p>
+
+<a href="#" onclick="openCreateTransactionModal()">Create Transaction</a>
+<div class="modal-container" id="create-transaction-modal">
+    <form id="create-transaction-form" method="POST" action="{% url 'accounts:create_transaction' %}">
+        {% csrf_token %}
+        <select name="type" required>
+            <option value="" disabled selected>Type</option>
+            <option value="expense">Expense</option>
+            <option value="income">Income</option>
+        </select>
+        <input type="number" name="amount" placeholder="Amount" required>
+        <select name="category" required>
+            <option value="" disabled selected>Category</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+        </select>
+        <select name="subcategory" required>
+            <option value="" disabled selected>Subcategory</option>
+            {% for subcategory in subcategories %}
+                <option value="{{ subcategory.id }}">{{ subcategory.name }}</option>
+            {% endfor %}
+        </select>
+        <input type="text" name="description" placeholder="Description" required>
+        <input type="date" name="date" value="{{ today }}" required>
+        <button type="submit">Create Transaction</button>
+        <a href="#" onclick="toggleCreateTransactionModal()">Cancel</a>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'base/js/scripts.js' %}"></script>
 {% endblock %}

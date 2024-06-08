@@ -25,7 +25,7 @@
                     <td>{{ account.user.username }}</td>
                     <td>R$ {{ account.balance }}</td>
                     <td>
-                        <a href="#" onclick="openDeleteModal({{ account.id }}, '{{ account.name }}')">Delete</a>
+                        <a href="#" onclick="openDeleteAccountModal({{ account.id }}, '{{ account.name }}')">Delete</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -34,16 +34,34 @@
     {% if success %}
         <p class="message">{{ success }}</p>
     {% endif %}
-    <a href="{% url 'accounts:create' %}">Create Account</a>
+    {% if error %}
+        <p class="message">{{ error }}</p>
+    {% endif %}
+    <a href="#" onclick="openCreateAccountModal()">Create Account</a>
 
-    <div class="modal-container delete">
+    <div class="modal-container" id="delete-account-modal">
         <h2>Delete Account</h2>
-        <p>Are you sure you want to delete the account <strong id="item-name"></strong>?</p>
-        <form id="delete-form" method="POST">
+        <p>Are you sure you want to delete the account <strong id="account-name"></strong>?</p>
+        <form id="delete-account-form" method="POST">
             {% csrf_token %}
             <button type="submit">Delete</button>
+            <a href="#" onclick="toggleDeleteAccountModal()">Cancel</a>
         </form>
-        <button onclick="toggleDeleteModal()">Cancel</button>
+    </div>
+    <div class="modal-container" id="create-account-modal">
+        <form method="POST" id="create-account-form" action="{% url 'accounts:create' %}">
+            {% csrf_token %}
+            <select name="user" required>
+                <option value="" disabled selected>Account Owner</option>
+                {% for user in users %}
+                    <option value="{{ user.id }}">{{ user.username }}</option>
+                {% endfor %}
+            </select>
+            <input type="text" name="name" placeholder="Account Name" required>
+            <input type="number" name="initial_balance" placeholder="Initial Balance" required>
+            <button type="submit">Create Account</button>
+            <a href="#" onclick="toggleCreateAccountModal()">Cancel</a>
+        </form>
     </div>
 {% endblock %}
 

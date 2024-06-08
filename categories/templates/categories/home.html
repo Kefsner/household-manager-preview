@@ -23,7 +23,7 @@
                     <td>{{ category.name }}</td>
                     <td>{{ category.get_type_display }}</td>
                     <td>
-                        <a href='#' onclick="openDeleteModal({{ category.id }}, '{{ category.name }}')">Delete</a>
+                        <a href='#' onclick="openDeleteCategoryModal({{ category.id }}, '{{ category.name }}')">Delete</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -32,16 +32,29 @@
     {% if success %}
         <p class="message">{{ success }}</p>
     {% endif %}
-    <a href="{% url 'categories:create' %}">Create Category</a>
+    <a href="#" onclick="openCreateCategoryModal()">Create Category</a>
 
-    <div class="modal-container delete">
+    <div class="modal-container" id="delete-category-modal">
         <h2>Delete Category</h2>
-        <p>Are you sure you want to delete the category <strong id="item-name"></strong>?</p>
-        <form id="delete-form" method="POST">
+        <p>Are you sure you want to delete the category <strong id="category-name"></strong>?</p>
+        <form id="delete-category-form" method="POST">
             {% csrf_token %}
             <button type="submit">Delete</button>
         </form>
-        <button onclick="toggleDeleteModal()">Cancel</button>
+        <a href="#" onclick="toggleDeleteCategoryModal()">Cancel</a>
+    </div>
+    <div class="modal-container" id="create-category-modal">
+        <form method="POST" id="create-category-form" action="{% url 'categories:create' %}">
+            {% csrf_token %}
+            <input type="text" name="name" placeholder="Category Name" required>
+            <select name="type" required>
+                <option value="" disabled selected>Category Type</option>
+                <option value="income">Income</option>
+                <option value="expense">Expense</option>
+            </select>
+            <button type="submit">Create Category</button>
+            <a href="#" onclick="toggleCreateCategoryModal()">Cancel</a>
+        </form>
     </div>
 {% endblock %}
 
