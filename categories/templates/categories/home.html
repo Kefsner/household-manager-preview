@@ -1,0 +1,50 @@
+{% extends "base/base.html" %}
+
+{% load static %}
+
+{% block title %}
+    Categories
+{% endblock %}
+
+{% block content %}
+    <h1>Categories</h1>
+    <p>Here you can manage your categories.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+                <tr>
+                    <td>{{ category.name }}</td>
+                    <td>{{ category.get_type_display }}</td>
+                    <td>
+                        <a href='#' onclick="openDeleteModal({{ category.id }}, '{{ category.name }}')">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if success %}
+        <p class="message">{{ success }}</p>
+    {% endif %}
+    <a href="{% url 'categories:create' %}">Create Category</a>
+
+    <div class="modal-container delete">
+        <h2>Delete Category</h2>
+        <p>Are you sure you want to delete the category <strong id="item-name"></strong>?</p>
+        <form id="delete-form" method="POST">
+            {% csrf_token %}
+            <button type="submit">Delete</button>
+        </form>
+        <button onclick="toggleDeleteModal()">Cancel</button>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'categories/js/scripts.js' %}"></script>
+{% endblock %}

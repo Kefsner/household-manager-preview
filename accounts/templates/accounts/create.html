@@ -1,0 +1,33 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+    Create Account
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block content %}
+    <form method="POST" id="create-account-form" action="{% url 'accounts:create' %}">
+        {% csrf_token %}
+        <select name="user" required>
+            <option value="" disabled selected>Account Owner</option>
+            {% for user in users %}
+                <option value="{{ user.id }}">{{ user.username }}</option>
+            {% endfor %}
+        </select>
+        <input type="text" name="name" placeholder="Account Name" required>
+        <input type="number" name="initial_balance" placeholder="Initial Balance" required>
+        <button type="submit">Create Account</button>
+        {% if non_field_error %}
+            <p class="error">{{ non_field_error }}</p>
+        {% endif %}
+        {% if success %}
+            <p class="message">{{ success }}</p>
+        {% endif %}
+        <a href="{% url 'accounts:home' %}">Back</a>
+    </form>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

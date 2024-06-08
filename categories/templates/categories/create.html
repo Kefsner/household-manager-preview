@@ -1,0 +1,31 @@
+{% extends "base/base.html" %}
+
+{% block title %}
+    Create Category
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block content %}
+    <form method="POST" id="create-category-form" action="{% url 'categories:create' %}">
+        {% csrf_token %}
+        <input type="text" name="name" placeholder="Category Name" required>
+        <select name="type" required>
+            <option value="" disabled selected>Category Type</option>
+            <option value="income">Income</option>
+            <option value="expense">Expense</option>
+        </select>
+        <button type="submit">Create Category</button>
+        {% if non_field_error %}
+            <p class="error">{{ non_field_error }}</p>
+        {% endif %}
+        {% if success %}
+            <p class="message">{{ success }}</p>
+        {% endif %}
+        <a href="{% url 'categories:home' %}">Back</a>
+    </form>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

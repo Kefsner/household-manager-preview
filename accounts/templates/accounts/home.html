@@ -1,0 +1,52 @@
+{% extends "base/base.html" %}
+
+{% load static %}
+
+{% block title %}
+    Accounts
+{% endblock %}
+
+{% block content %}
+    <h1>Accounts</h1>
+    <p>Here you can manage your bank accounts.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Owner</th>
+                <th>Balance</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for account in accounts %}
+                <tr>
+                    <td>{{ account.name }}</td>
+                    <td>{{ account.user.username }}</td>
+                    <td>R$ {{ account.balance }}</td>
+                    <td>
+                        <a href="#" onclick="openDeleteModal({{ account.id }}, '{{ account.name }}')">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if success %}
+        <p class="message">{{ success }}</p>
+    {% endif %}
+    <a href="{% url 'accounts:create' %}">Create Account</a>
+
+    <div class="modal-container delete">
+        <h2>Delete Account</h2>
+        <p>Are you sure you want to delete the account <strong id="item-name"></strong>?</p>
+        <form id="delete-form" method="POST">
+            {% csrf_token %}
+            <button type="submit">Delete</button>
+        </form>
+        <button onclick="toggleDeleteModal()">Cancel</button>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'accounts/js/scripts.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+    Error
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>An Error Occurred</h1>
+    <p>We are sorry, but something went wrong. Please try again later.</p>
+    <a href="{% url 'base:home' %}">Go Back to Home</a>
+</div>
+{% endblock %}
