@@ -1,0 +1,72 @@
+{% extends "base/base.html" %}
+
+{% load static %}
+
+{% block title %}
+    Credit Cards
+{% endblock %}
+
+{% block content %}
+    <h1>Credit Cards</h1>
+    <p>Here you can manage your credit cards.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Owner</th>
+                <th>Limit</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for creditcard in creditcards %}
+                <tr>
+                    <td>{{ creditcard.name }}</td>
+                    <td>{{ creditcard.user.username }}</td>
+                    <td>R$ {{ creditcard.limit }}</td>
+                    <td>
+                        <a href="#" onclick="openDeleteCreditCardModal({{ creditcard.id }}, '{{ creditcard.name }}')">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if success %}
+        <p class="message">{{ success }}</p>
+    {% endif %}
+    {% if error %}
+        <p class="message">{{ error }}</p>
+    {% endif %}
+    <a href="#" onclick="openCreateCreditCardModal()">Create Credit Card</a>
+
+    <div class="modal-container" id="delete-creditcard-modal">
+        <h2>Delete Credit Card</h2>
+        <p>Are you sure you want to delete the credit card <strong id="creditcard-name"></strong>?</p>
+        <form id="delete-creditcard-form" method="POST">
+            {% csrf_token %}
+            <button type="submit">Delete</button>
+            <a href="#" onclick="toggleDeleteCreditCardModal()">Cancel</a>
+        </form>
+    </div>
+    <div class="modal-container" id="create-creditcard-modal">
+        <form method="POST" id="create-creditcard-form" action="{% url 'creditcards:create' %}">
+            {% csrf_token %}
+            <input type="text" name="name" placeholder="Credit Card Name" required>
+            <select name="account" required>
+                <option value="" disabled selected>Account</option>
+                {% for account in accounts %}
+                    <option value="{{ account.id }}">{{ account.name }}</option>
+                {% endfor %}
+            </select>
+            <input type="number" name="due_day" placeholder="Due Day" required>
+            <input type="number" name="limit" placeholder="Limit" required>
+            <button type="submit">Create Credit Card</button>
+            <a href="#" onclick="toggleCreateCreditCardModal()">Cancel</a>
+        </form>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'creditcards/js/scripts.js' %}"></script>
+{% endblock %}

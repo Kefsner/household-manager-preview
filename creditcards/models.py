@@ -11,6 +11,9 @@ class CreditCard(MetaData):
     limit = models.DecimalField(max_digits=10, decimal_places=2)
     remaining_limit = models.DecimalField(max_digits=10, decimal_places=2)
 
+    class Meta:
+        unique_together = ['name', 'account']
+
 class CreditCardTransaction(MetaData):
     description = models.CharField(max_length=100, null=True)
     value = models.DecimalField(max_digits=10, decimal_places=2)

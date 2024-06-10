@@ -1,5 +1,5 @@
 from django.http import HttpRequest
-
+from django.db.utils import IntegrityError
 from categories.models import Category, Subcategory
 
 class CategoryServices:
@@ -16,14 +16,10 @@ class CategoryServices:
     def add_subcategory(self, request: HttpRequest, category: Category) -> str:
         subcategory = Subcategory()
         subcategory.name = self.data['name']
-        print(category)
         subcategory.category = category
         subcategory.description = self.data['description']
         subcategory.save(request)
         return 'Subcategory created successfully.'
-    
-from users.models import User
-from categories.models import Category, Subcategory
 
 class DefaultCategoriesServices:
     def populate_categories(self, request):
@@ -58,11 +54,14 @@ class DefaultCategoriesServices:
             }
         ]
         for category in categories:
-            Category.objects.create(
-                **category,
-                created_by=request.user,
-                db=request.user.db
-            )
+            try:
+                Category.objects.create(
+                    **category,
+                    created_by=request.user,
+                    db=request.user.db
+                )
+            except IntegrityError:
+                pass
 
     def populate_subcategories(self, request):
         subcategories = [
@@ -168,11 +167,14 @@ class DefaultCategoriesServices:
             },
         ]    
         for subcategory in subcategories:
-            Subcategory.objects.create(
-                **subcategory,
-                created_by=request.user,
-                db=request.user.db
-            )
+            try:
+                Subcategory.objects.create(
+                    **subcategory,
+                    created_by=request.user,
+                    db=request.user.db
+                )
+            except IntegrityError:
+                pass
 
     def run(self, request):
         self.populate_categories(request)

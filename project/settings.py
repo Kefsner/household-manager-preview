@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'authentication',
     'users',
     'accounts',
-    'creditcard',
+    'creditcards',
     'categories',
 ]
 
