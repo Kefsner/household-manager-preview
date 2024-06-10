@@ -2,6 +2,10 @@
 
 {% load static %}
 
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'categories/css/styles.css' %}">
+{% endblock styles %}
+
 {% block title %}
     Categories
 {% endblock %}
@@ -24,7 +28,15 @@
                     <td>{{ category.name }}</td>
                     <td>{{ category.get_type_display }}</td>
                     <td>
-                        <table>
+                        <a href="#" onclick="toggleSubcategories('subcategory-table-{{ category.id }}')">Toggle Subcategories</a>
+                        <table id="subcategory-table-{{ category.id }}" class="subcategory-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
                             <tbody>
                                 {% for subcategory in category.subcategory_set.all %}
                                     <tr>
@@ -55,6 +67,7 @@
         <p class="message">{{ error }}</p>
     {% endif %}
     <a href="#" onclick="openCreateCategoryModal()">Create Category</a>
+    <a href="#" onclick="openCreateDefaultCategoriesModal()">Create Default Categories</a>
 
     <div class="modal-container" id="delete-category-modal">
         <h2>Delete Category</h2>
@@ -96,6 +109,15 @@
             {% csrf_token %}
             <button type="submit">Delete</button>
             <a href="#" onclick="toggleDeleteSubcategoryModal()">Cancel</a>
+        </form>
+    </div>
+    <div class="modal-container" id="create-default-categories-modal">
+        <h2>Create Default Categories</h2>
+        <p>Are you sure you want to create the default categories?</p>
+        <form id="create-default-categories-form" method="POST" action="{% url 'categories:create-default' %}">
+            {% csrf_token %}
+            <button type="submit">Create Default Categories</button>
+            <a href="#" onclick="toggleCreateDefaultCategoriesModal()">Cancel</a>
         </form>
     </div>
 {% endblock %}

@@ -14,8 +14,8 @@ class LogSystem(models.Model):
 class MetaData(models.Model):
     id = models.AutoField(primary_key=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey('users.User', on_delete=models.SET_NULL, null=True)
-    db = models.ForeignKey(DB, on_delete=models.DO_NOTHING)
+    created_by = models.ForeignKey('users.User', on_delete=models.CASCADE)
+    db = models.ForeignKey(DB, on_delete=models.CASCADE)
 
     class Meta:
         abstract = True

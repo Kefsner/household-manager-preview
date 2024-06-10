@@ -51,3 +51,19 @@ function toggleDeleteSubcategoryModal() {
     const modal = document.getElementById('delete-subcategory-modal');
     modal.classList.toggle('show');
 }
+
+// ===== Create Default Category Modal =====
+function openCreateDefaultCategoriesModal() {
+  toggleCreateDefaultCategoriesModal();
+}
+
+function toggleCreateDefaultCategoriesModal() {
+  const modal = document.getElementById('create-default-categories-modal');
+  modal.classList.toggle('show');
+}
+
+// ===== Toggle Subcategories table =====
+function toggleSubcategories(categoryId) {
+    const subcategories = document.getElementById(categoryId);
+    subcategories.classList.toggle('show');
+}

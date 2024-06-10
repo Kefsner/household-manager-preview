@@ -1,0 +1,7 @@
+.subcategory-table {
+    display: none;
+}
+
+.subcategory-table.show {
+    display: table;
+}

@@ -5,7 +5,7 @@ from django.db import IntegrityError
 from django.views import View
 
 from categories.serializers import CreateCategorySerializer, AddSubcategorySerializer
-from categories.services import CategoryServices
+from categories.services import CategoryServices, DefaultCategoriesServices
 from categories.models import Category, Subcategory
 
 from core.logger import Logger
@@ -113,6 +113,22 @@ class DeleteSubcategoryView(LoginRequiredMixin, View):
                 exception=e,
                 request=request,
                 data=request.POST,
+                traceback=traceback.format_exc()
+            )
+            return render(request, 'core/error.html')
+        
+class CreateDefaultCategoriesView(LoginRequiredMixin, View):
+    def post(self, request):
+        try:
+            services = DefaultCategoriesServices()
+            services.run(request)
+            msgs.success(request, 'Default categories created successfully.')
+            return redirect('categories:home')
+        except Exception as e:
+            logger = Logger()
+            logger.log(
+                exception=e,
+                request=request,
                 traceback=traceback.format_exc()
             )
             return render(request, 'core/error.html')
