@@ -4,7 +4,7 @@ from django.contrib import messages as msgs
 from django.db import IntegrityError
 from django.views import View
 
-from categories.serializers import CreateCategorySerializer
+from categories.serializers import CreateCategorySerializer, AddSubcategorySerializer
 from categories.services import CategoryServices
 from categories.models import Category, Subcategory
 
@@ -63,6 +63,49 @@ class DeleteCategoryView(LoginRequiredMixin, View):
             category = Category.objects.get(pk=pk)
             category.delete()
             msgs.success(request, 'Category deleted successfully.')
+            return redirect('categories:home')
+        except Exception as e:
+            logger = Logger()
+            logger.log(
+                exception=e,
+                request=request,
+                data=request.POST,
+                traceback=traceback.format_exc()
+            )
+            return render(request, 'core/error.html')
+        
+class AddSubcategoryView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        try:
+            category = Category.objects.get(pk=pk)
+            serializer = AddSubcategorySerializer(data=request.POST)
+            data = serializer.validated_data
+            services = CategoryServices(data)
+            msgs.success(request, services.add_subcategory(request, category))
+            return redirect('categories:home')
+        except SerializerException as e:
+            for field, error in e.errors.items():
+                msgs.error(request, error, extra_tags=field)
+            return redirect('categories:home')
+        except IntegrityError as e:
+            msgs.error(request, 'Subcategory already exists in this category.')
+            return redirect('categories:home')
+        except Exception as e:
+            logger = Logger()
+            logger.log(
+                exception=e,
+                request=request,
+                data=request.POST,
+                traceback=traceback.format_exc()
+            )
+            return render(request, 'core/error.html')
+        
+class DeleteSubcategoryView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        try:
+            subcategory = Subcategory.objects.get(pk=pk)
+            subcategory.delete()
+            msgs.success(request, 'Subcategory deleted successfully.')
             return redirect('categories:home')
         except Exception as e:
             logger = Logger()

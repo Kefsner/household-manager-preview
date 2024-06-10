@@ -13,7 +13,7 @@ class Category(MetaData):
 
 class Subcategory(MetaData):
     name = models.CharField(max_length=100)
-    category = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     description = models.CharField(max_length=255, null=True)
 
     class Meta:

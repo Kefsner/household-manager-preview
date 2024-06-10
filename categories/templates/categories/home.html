@@ -14,6 +14,7 @@
             <tr>
                 <th>Name</th>
                 <th>Type</th>
+                <th>Subcategories</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -23,6 +24,24 @@
                     <td>{{ category.name }}</td>
                     <td>{{ category.get_type_display }}</td>
                     <td>
+                        <table>
+                            <tbody>
+                                {% for subcategory in category.subcategory_set.all %}
+                                    <tr>
+                                        <td>{{ subcategory.name }}</td>
+                                        <td>{{ subcategory.description }}</td>
+                                        <td>
+                                            <a href='#' onclick="openDeleteSubcategoryModal({{ subcategory.id }}, '{{ subcategory.name }}')">Delete</a>
+                                        </td>
+                                    </tr>
+                                {% empty %}
+                                    <tr><td>No subcategories</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </td>
+                    <td>
+                        <a href="#" onclick="openAddSubcategoryModal({{ category.id }}, '{{ category.name }}')">Add Subcategory</a>
                         <a href='#' onclick="openDeleteCategoryModal({{ category.id }}, '{{ category.name }}')">Delete</a>
                     </td>
                 </tr>
@@ -31,6 +50,9 @@
     </table>
     {% if success %}
         <p class="message">{{ success }}</p>
+    {% endif %}
+    {% if error %}
+        <p class="message">{{ error }}</p>
     {% endif %}
     <a href="#" onclick="openCreateCategoryModal()">Create Category</a>
 
@@ -54,6 +76,26 @@
             </select>
             <button type="submit">Create Category</button>
             <a href="#" onclick="toggleCreateCategoryModal()">Cancel</a>
+        </form>
+    </div>
+    <div class="modal-container" id="add-subcategory-modal">
+        <h2>Add Subcategory</h2>
+        <p>Add a subcategory to the category <strong id="subcategory-category-name"></strong>.</p>
+        <form id="add-subcategory-form" method="POST">
+            {% csrf_token %}
+            <input type="text" name="name" placeholder="Subcategory Name" required>
+            <input type="text" name="description" placeholder="Subcategory Description" required>
+            <button type="submit">Add Subcategory</button>
+            <a href="#" onclick="toggleAddSubcategoryModal()">Cancel</a>
+        </form>
+    </div>
+    <div class="modal-container" id="delete-subcategory-modal">
+        <h2>Delete Subcategory</h2>
+        <p>Are you sure you want to delete the subcategory <strong id="subcategory-name"></strong>?</p>
+        <form id="delete-subcategory-form" method="POST">
+            {% csrf_token %}
+            <button type="submit">Delete</button>
+            <a href="#" onclick="toggleDeleteSubcategoryModal()">Cancel</a>
         </form>
     </div>
 {% endblock %}

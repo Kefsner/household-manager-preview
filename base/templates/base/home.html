@@ -15,26 +15,33 @@
 <div class="modal-container" id="create-transaction-modal">
     <form id="create-transaction-form" method="POST" action="{% url 'accounts:create_transaction' %}">
         {% csrf_token %}
-        <select name="type" required>
+        <label for="transaction-form-element-type">Type</label>
+        <select name="type" id="transaction-form-element-type" required>
             <option value="" disabled selected>Type</option>
             <option value="expense">Expense</option>
             <option value="income">Income</option>
+            <option value="transfer">Transfer</option>
         </select>
-        <input type="number" name="amount" placeholder="Amount" required>
-        <select name="category" required>
+        <label for="transaction-form-element-amount">Amount</label>
+        <input type="number" name="amount" placeholder="Amount" id="transaction-form-element-amount" required>
+        <label for="transaction-form-element-category">Category</label>
+        <select name="category" required id="transaction-form-element-category">
             <option value="" disabled selected>Category</option>
             {% for category in categories %}
                 <option value="{{ category.id }}">{{ category.name }}</option>
             {% endfor %}
         </select>
-        <select name="subcategory" required>
+        <label for="transaction-form-element-subcategory">Subcategory</label>
+        <select name="subcategory" required id="transaction-form-element-subcategory">
             <option value="" disabled selected>Subcategory</option>
             {% for subcategory in subcategories %}
-                <option value="{{ subcategory.id }}">{{ subcategory.name }}</option>
+                <option value="{{ subcategory.id }}" class="subcategory-option" data-category="{{ subcategory.category.id }}">{{ subcategory.name }}</option>
             {% endfor %}
         </select>
-        <input type="text" name="description" placeholder="Description" required>
-        <input type="date" name="date" value="{{ today }}" required>
+        <label for="transaction-form-element-description">Description</label>
+        <input type="text" name="description" placeholder="Description" required id="transaction-form-element-description">
+        <label for="transaction-form-element-date">Date</label>
+        <input type="date" name="date" value="{{ today }}" required id="transaction-form-element-date">
         <button type="submit">Create Transaction</button>
         <a href="#" onclick="toggleCreateTransactionModal()">Cancel</a>
     </form>
