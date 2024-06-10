@@ -5,7 +5,7 @@ function openDeleteCreditCardModal(creditCardId, creditCardName) {
     const creditCard = document.getElementById('creditcard-name');
     creditCard.innerHTML = creditCardName;
     const Form = document.getElementById('delete-creditcard-form');
-    Form.action = '/creditcards/' + DELETE_URL + "/" + creditCardId + "/";
+    Form.action = '/creditcards/' + DELETE_URL + "/creditcard/" + creditCardId + "/";
     toggleDeleteCreditCardModal();
 }
 

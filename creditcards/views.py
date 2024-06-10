@@ -17,9 +17,9 @@ import traceback
 class CreditCardView(View):
     def get(self, request):
         try:
-            credit_cards = CreditCard.objects.filter(db=request.user.db)
+            creditcards = CreditCard.objects.filter(db=request.user.db)
             accounts = Account.objects.filter(db=request.user.db)
-            context = { 'credit_cards': credit_cards, 'accounts': accounts }
+            context = { 'creditcards': creditcards, 'accounts': accounts }
             messages = list(msgs.get_messages(request))
             for message in messages:
                 field = message.tags.split()[0]
@@ -55,6 +55,22 @@ class CreateCreditCardView(View):
                 exception=e,
                 request=request,
                 data=request.POST,
+                traceback=traceback.format_exc()
+            )
+            return render(request, 'core/error.html')
+        
+class DeleteCreditCardView(View):
+    def post(self, request, pk):
+        try:
+            credit_card = CreditCard.objects.get(id=pk)
+            credit_card.delete()
+            msgs.success(request, 'Credit card deleted successfully')
+            return redirect('creditcards:home')
+        except Exception as e:
+            logger = Logger()
+            logger.log(
+                exception=e,
+                request=request,
                 traceback=traceback.format_exc()
             )
             return render(request, 'core/error.html')
