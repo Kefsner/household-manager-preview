@@ -39,8 +39,9 @@ class CreateAccountSerializer:
         
 class CreateTransactionSerializer:
     def __init__(self, data: QueryDict) -> None:
+        self.type = data.get('type', None)
         self.account = data.get('account', None)
-        self.value = data.get('value', None)
+        self.amount = data.get('amount', None)
         self.category = data.get('category', None)
         self.subcategory = data.get('subcategory', None)
         self.description = data.get('description', None)
@@ -48,32 +49,43 @@ class CreateTransactionSerializer:
         self.validate_data()
 
     def validate_data(self) -> None:
+        self.validate_type()
         self.validate_account()
-        self.validate_value()
+        self.validate_amount()
         self.validate_category()
         self.validate_subcategory()
         self.validate_description()
         self.validate_date()
         self.validated_data = {
+            'type': self.type,
             'account': self.account,
-            'value': self.value,
+            'amount': self.amount,
             'category': self.category,
             'subcategory': self.subcategory,
             'description': self.description,
             'date': self.date
         }
 
+    def validate_type(self) -> None:
+        if not self.type:
+            raise SerializerException({'type_error': 'The field is required'})
+        if self.type not in ['expense', 'income']:
+            raise SerializerException({'type_error': 'The field must be either "expense" or "income"'})
+
     def validate_account(self) -> None:
         if not self.account:
             raise SerializerException({'account_error': 'The field is required'})
         
-    def validate_value(self) -> None:
-        if not self.value:
-            raise SerializerException({'value_error': 'The field is required'})
+    def validate_amount(self) -> None:
+        if not self.amount:
+            raise SerializerException({'amount_error': 'The field is required'})
+        if len(str(self.amount).split('.')[0]) > 10:
+            raise SerializerException({'amount_error': 'The field must have at most 10 digits'})
         try:
-            self.value = Decimal(self.value)
+            self.amount = Decimal(self.amount)
+            self.amount = abs(self.amount)
         except:
-            raise SerializerException({'value_error': 'The field must be a number'})
+            raise SerializerException({'amount_error': 'The field must be a number'})
         
     def validate_category(self) -> None:
         if not self.category:

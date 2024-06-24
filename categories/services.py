@@ -51,7 +51,11 @@ class DefaultCategoriesServices:
             {
                 'name': 'Investments & Savings',
                 'type': 'expense'
-            }
+            },
+            {
+                'name': 'Salary',
+                'type': 'income'
+            }           
         ]
         for category in categories:
             try:
@@ -165,6 +169,11 @@ class DefaultCategoriesServices:
                 'category': Category.objects.get(name='Investments & Savings'),
                 'description': 'Stocks, bonds, etc'
             },
+            {
+                'name': 'Salary',
+                'category': Category.objects.get(name='Salary'),
+                'description': 'Monthly salary'
+            }
         ]    
         for subcategory in subcategories:
             try:

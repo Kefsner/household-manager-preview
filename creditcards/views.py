@@ -5,6 +5,7 @@ from django.views import View
 
 from accounts.models import Account
 
+from creditcards.serializers import CreateCreditCardTransactionSerializer
 from creditcards.serializers import CreateCreditCardSerializer
 from creditcards.services import CreditCardServices
 from creditcards.models import CreditCard
@@ -78,7 +79,8 @@ class DeleteCreditCardView(View):
 class CreateTransactionView(View):
     def post(self, request):
         try:
-            data = request.POST
+            serializer = CreateCreditCardTransactionSerializer(data=request.POST)
+            data = serializer.validated_data                   
             services = CreditCardServices(data)
             msgs.success(request, services.create_transaction(request))
             return redirect('creditcards:home')

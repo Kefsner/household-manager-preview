@@ -17,14 +17,14 @@ class Account(MetaData):
 
 class Transaction(MetaData):
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
-    value = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     subcategory = models.ForeignKey(Subcategory, on_delete=models.CASCADE, null=True)
     description = models.CharField(max_length=100, null=True)
     date = models.DateField()
 
 class Transfer(MetaData):
-    value = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
     date = models.DateField()
     from_account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='transfers_sent')
     to_account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='transfers_received')

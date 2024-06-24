@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages as msgs
 from django.db.models import Sum
 from django.shortcuts import render
 from django.views import View
@@ -22,6 +23,10 @@ class BaseView(LoginRequiredMixin, View):
             'categories': categories,
             'subcategories': subcategories,
             'accounts': accounts,
-            'credit_cards': credit_cards
+            'credit_cards': credit_cards,
             }
+        messages = list(msgs.get_messages(request))
+        for message in messages:
+            field = message.tags.split()[0]
+            context[field] = message.message
         return render(request, 'base/home.html', context)

@@ -10,25 +10,36 @@
 <h1>Home</h1>
 <p>Welcome, {{ user.username }}! Here you have an overview of your household finances.</p>
 <p>Total Balance: R$ {{ balance_sum }}</p>
-
+{% if success %}
+    <p class="message">{{ success }}</p>
+{% endif %}
+{% if error %}
+    <p class="message">{{ error }}</p>
+{% endif %}
 <a href="#" onclick="openTransactionModal('income')">Add Income</a>
 <div id="income-form-container" class="modal-container">
     <form id="form-create-income" method="POST" action="{% url 'accounts:create_transaction' %}">
         {% csrf_token %}
         <input type="hidden" name="type" value="income">
         <input type="number" name="amount" placeholder="Amount" required>
-        <select name="category" required>
-            <option value="" hidden selected>Category</option>
-            {% for category in categories %}
-                <option value="{{ category.id }}">{{ category.name }}</option>
-            {% endfor %}
-        </select>
-        <select name="subcategory" required>
-            <option value="" hidden selected>Subcategory</option>
-            {% for subcategory in subcategories %}
-                <option value="{{ subcategory.id }}" class="category-{{ subcategory.category.id }}">{{ subcategory.name }}</option>
-            {% endfor %}
-        </select>
+        <div class="category-container">
+            <select name="category" required>
+                <option value="" hidden selected>Category</option>
+                {% for category in categories %}
+                    {% if category.type == 'income' %}
+                    <option value="{{ category.id }}">{{ category.name }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <select name="subcategory">
+                <option value="" hidden selected>Subcategory</option>
+                {% for subcategory in subcategories %}]
+                    {% if subcategory.category.type == 'income' %}
+                        <option value="{{ subcategory.id }}" class="category-{{ subcategory.category.id }}">{{ subcategory.name }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
         <select name="account" required>
             <option value="" hidden selected>Account</option>
             {% for account in accounts %}
@@ -47,18 +58,24 @@
         {% csrf_token %}
         <input type="hidden" name="type" value="expense">
         <input type="number" name="amount" placeholder="Amount" required>
-        <select name="category" required>
-            <option value="" hidden selected>Category</option>
-            {% for category in categories %}
-                <option value="{{ category.id }}">{{ category.name }}</option>
-            {% endfor %}
-        </select>
-        <select name="subcategory" required>
-            <option value="" hidden selected>Subcategory</option>
-            {% for subcategory in subcategories %}
-                <option value="{{ subcategory.id }}" class="category-{{ subcategory.category.id }}">{{ subcategory.name }}</option>
-            {% endfor %}
-        </select>
+        <div class="category-container">
+            <select name="category" required>
+                <option value="" hidden selected>Category</option>
+                {% for category in categories %}
+                    {% if category.type == 'expense' %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <select name="subcategory">
+                <option value="" hidden selected>Subcategory</option>
+                {% for subcategory in subcategories %}
+                    {% if subcategory.category.type == 'expense' %}
+                        <option value="{{ subcategory.id }}" class="category-{{ subcategory.category.id }}">{{ subcategory.name }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
         <select name="account" required>
             <option value="" hidden selected>Account</option>
             {% for account in accounts %}
@@ -77,18 +94,6 @@
         {% csrf_token %}
         <input type="hidden" name="type" value="transfer">
         <input type="number" name="amount" placeholder="Amount" required>
-        <select name="category" required>
-            <option value="" hidden selected>Category</option>
-            {% for category in categories %}
-                <option value="{{ category.id }}">{{ category.name }}</option>
-            {% endfor %}
-        </select>
-        <select name="subcategory" required>
-            <option value="" hidden selected>Subcategory</option>
-            {% for subcategory in subcategories %}
-                <option value="{{ subcategory.id }}" class="category-{{ subcategory.category.id }}">{{ subcategory.name }}</option>
-            {% endfor %}
-        </select>
         <select name="account" required>
             <option value="" hidden selected>Account</option>
             {% for account in accounts %}
@@ -113,18 +118,24 @@
         {% csrf_token %}
         <input type="hidden" name="type" value="credit-card">
         <input type="number" name="amount" placeholder="Amount" required>
-        <select name="category" required>
-            <option value="" hidden selected>Category</option>
-            {% for category in categories %}
-                <option value="{{ category.id }}">{{ category.name }}</option>
-            {% endfor %}
-        </select>
-        <select name="subcategory" required>
-            <option value="" hidden selected>Subcategory</option>
-            {% for subcategory in subcategories %}
-                <option value="{{ subcategory.id }}" class="category-{{ subcategory.category.id }}">{{ subcategory.name }}</option>
-            {% endfor %}
-        </select>
+        <div class="category-container">
+            <select name="category" required>
+                <option value="" hidden selected>Category</option>
+                {% for category in categories %}
+                    {% if category.type == 'expense' %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <select name="subcategory" required>
+                <option value="" hidden selected>Subcategory</option>
+                {% for subcategory in subcategories %}
+                    {% if subcategory.category.type == 'expense' %}
+                        <option value="{{ subcategory.id }}" class="category-{{ subcategory.category.id }}">{{ subcategory.name }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
         <select name="credit_card" required>
             <option value="" hidden selected>Credit Card</option>
             {% for credit_card in credit_cards %}

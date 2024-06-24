@@ -47,3 +47,63 @@ class CreateCreditCardSerializer:
             self.limit = Decimal(self.limit)
         except:
             raise SerializerException({'limit_error': 'The field must be a number'})
+        
+class CreateCreditCardTransactionSerializer:
+    def __init__(self, data: QueryDict) -> None:
+        self.credit_card = data.get('credit_card', None)
+        self.description = data.get('description', None)
+        self.amount = data.get('amount', None)
+        self.category = data.get('category', None)
+        self.subcategory = data.get('subcategory', None)
+        self.installments = data.get('installments', None)
+        self.date = data.get('date', None)
+        self.validate_data()
+
+    def validate_data(self) -> None:
+        self.validate_credit_card()
+        self.validate_description()
+        self.validate_amount()
+        self.validate_category()
+        self.validate_subcategory()
+        self.validate_installments()
+        self.validated_data = {
+            'credit_card': self.credit_card,
+            'description': self.description,
+            'amount': self.amount,
+            'category': self.category,
+            'subcategory': self.subcategory,
+            'installments': self.installments,
+            'date': self.date
+        }
+
+    def validate_credit_card(self) -> None:
+        if not self.credit_card:
+            raise SerializerException({'credit_card_error': 'The field is required'})
+        
+    def validate_description(self) -> None:
+        if not self.description:
+            raise SerializerException({'description_error': 'The field is required'})
+        
+    def validate_amount(self) -> None:
+        if not self.amount:
+            raise SerializerException({'amount_error': 'The field is required'})
+        try:
+            self.amount = Decimal(self.amount)
+        except:
+            raise SerializerException({'amount_error': 'The field must be a number'})
+        
+    def validate_category(self) -> None:
+        if not self.category:
+            raise SerializerException({'category_error': 'The field is required'})
+        
+    def validate_subcategory(self) -> None:
+        if not self.subcategory:
+            raise SerializerException({'subcategory_error': 'The field is required'})
+        
+    def validate_installments(self) -> None:
+        if not self.installments:
+            raise SerializerException({'installments_error': 'The field is required'})
+        try:
+            self.installments = int(self.installments)
+        except:
+            raise SerializerException({'installments_error': 'The field must be an integer'})

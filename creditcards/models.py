@@ -16,7 +16,7 @@ class CreditCard(MetaData):
 
 class CreditCardTransaction(MetaData):
     description = models.CharField(max_length=100, null=True)
-    value = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     subcategory = models.ForeignKey(Subcategory, on_delete=models.CASCADE, null=True)
     date = models.DateField()
@@ -25,7 +25,7 @@ class CreditCardTransaction(MetaData):
 
 class CreditCardInstallment(MetaData):
     credit_card_transaction = models.ForeignKey(CreditCardTransaction, on_delete=models.CASCADE, related_name='transaction_installments')
-    value = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
     due_date = models.DateField()
     installment_number = models.IntegerField()
     paid = models.BooleanField(default=False)
