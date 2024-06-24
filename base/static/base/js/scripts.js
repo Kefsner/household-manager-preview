@@ -1,9 +1,9 @@
 // ===== Create Transaction Modal =====
-function openCreateTransactionModal() {
-    toggleCreateTransactionModal();
+function openTransactionModal(type) {
+    toggleTransactionModal(type);
 }
 
-function toggleCreateTransactionModal() {
-    const modal = document.getElementById('create-transaction-modal');
+function toggleTransactionModal(type) {
+    const modal = document.getElementById(type + "-form-container");
     modal.classList.toggle('show');
 }

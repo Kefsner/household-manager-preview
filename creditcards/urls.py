@@ -9,4 +9,6 @@ urlpatterns = [
     path('', CreditCardView.as_view(), name='home'),
     path('create/', CreateCreditCardView.as_view(), name='create'),
     path(f'{settings.DELETE_URL}/creditcard/<int:pk>/', DeleteCreditCardView.as_view(), name='delete'),
+
+    path('transactions/create/', CreateTransactionView.as_view(), name='create_transaction'),
 ]

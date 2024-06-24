@@ -74,3 +74,20 @@ class DeleteCreditCardView(View):
                 traceback=traceback.format_exc()
             )
             return render(request, 'core/error.html')
+        
+class CreateTransactionView(View):
+    def post(self, request):
+        try:
+            data = request.POST
+            services = CreditCardServices(data)
+            msgs.success(request, services.create_transaction(request))
+            return redirect('creditcards:home')
+        except Exception as e:
+            logger = Logger()
+            logger.log(
+                exception=e,
+                request=request,
+                data=request.POST,
+                traceback=traceback.format_exc()
+            )
+            return render(request, 'core/error.html')

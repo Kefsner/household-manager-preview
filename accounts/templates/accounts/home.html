@@ -52,7 +52,7 @@
         <form method="POST" id="create-account-form" action="{% url 'accounts:create' %}">
             {% csrf_token %}
             <select name="user" required>
-                <option value="" disabled selected>Account Owner</option>
+                <option value="" hidden selected>Account Owner</option>
                 {% for user in users %}
                     <option value="{{ user.id }}">{{ user.username }}</option>
                 {% endfor %}

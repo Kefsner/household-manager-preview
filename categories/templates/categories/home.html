@@ -83,7 +83,7 @@
             {% csrf_token %}
             <input type="text" name="name" placeholder="Category Name" required>
             <select name="type" required>
-                <option value="" disabled selected>Category Type</option>
+                <option value="" hidden selected>Category Type</option>
                 <option value="income">Income</option>
                 <option value="expense">Expense</option>
             </select>

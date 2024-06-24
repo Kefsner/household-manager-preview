@@ -53,7 +53,7 @@
             {% csrf_token %}
             <input type="text" name="name" placeholder="Credit Card Name" required>
             <select name="account" required>
-                <option value="" disabled selected>Account</option>
+                <option value="" hidden selected>Account</option>
                 {% for account in accounts %}
                     <option value="{{ account.id }}">{{ account.name }}</option>
                 {% endfor %}

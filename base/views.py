@@ -6,19 +6,22 @@ from django.utils import timezone
 
 from accounts.models import Account
 from categories.models import Category, Subcategory
+from creditcards.models import CreditCard
 
 class BaseView(LoginRequiredMixin, View):
     def get(self, request):
-        balance_sum = Account.objects.filter(
-            db=request.user.db
-            ).aggregate(Sum('balance'))['balance__sum']
+        accounts = Account.objects.filter(db=request.user.db)
+        balance_sum = accounts.aggregate(Sum('balance'))['balance__sum']
         today = timezone.now().date().strftime('%Y-%m-%d')
         categories = Category.objects.filter(db=request.user.db)
         subcategories = Subcategory.objects.filter(db=request.user.db)
+        credit_cards = CreditCard.objects.filter(db=request.user.db)
         context = {
             'balance_sum': balance_sum,
             'today': today,
             'categories': categories,
             'subcategories': subcategories,
+            'accounts': accounts,
+            'credit_cards': credit_cards
             }
         return render(request, 'base/home.html', context)

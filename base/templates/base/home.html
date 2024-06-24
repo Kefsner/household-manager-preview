@@ -11,39 +11,131 @@
 <p>Welcome, {{ user.username }}! Here you have an overview of your household finances.</p>
 <p>Total Balance: R$ {{ balance_sum }}</p>
 
-<a href="#" onclick="openCreateTransactionModal()">Create Transaction</a>
-<div class="modal-container" id="create-transaction-modal">
-    <form id="create-transaction-form" method="POST" action="{% url 'accounts:create_transaction' %}">
+<a href="#" onclick="openTransactionModal('income')">Add Income</a>
+<div id="income-form-container" class="modal-container">
+    <form id="form-create-income" method="POST" action="{% url 'accounts:create_transaction' %}">
         {% csrf_token %}
-        <label for="transaction-form-element-type">Type</label>
-        <select name="type" id="transaction-form-element-type" required>
-            <option value="" disabled selected>Type</option>
-            <option value="expense">Expense</option>
-            <option value="income">Income</option>
-            <option value="transfer">Transfer</option>
-        </select>
-        <label for="transaction-form-element-amount">Amount</label>
-        <input type="number" name="amount" placeholder="Amount" id="transaction-form-element-amount" required>
-        <label for="transaction-form-element-category">Category</label>
-        <select name="category" required id="transaction-form-element-category">
-            <option value="" disabled selected>Category</option>
+        <input type="hidden" name="type" value="income">
+        <input type="number" name="amount" placeholder="Amount" required>
+        <select name="category" required>
+            <option value="" hidden selected>Category</option>
             {% for category in categories %}
                 <option value="{{ category.id }}">{{ category.name }}</option>
             {% endfor %}
         </select>
-        <label for="transaction-form-element-subcategory">Subcategory</label>
-        <select name="subcategory" required id="transaction-form-element-subcategory">
-            <option value="" disabled selected>Subcategory</option>
+        <select name="subcategory" required>
+            <option value="" hidden selected>Subcategory</option>
             {% for subcategory in subcategories %}
-                <option value="{{ subcategory.id }}" class="subcategory-option" data-category="{{ subcategory.category.id }}">{{ subcategory.name }}</option>
+                <option value="{{ subcategory.id }}" class="category-{{ subcategory.category.id }}">{{ subcategory.name }}</option>
             {% endfor %}
         </select>
-        <label for="transaction-form-element-description">Description</label>
-        <input type="text" name="description" placeholder="Description" required id="transaction-form-element-description">
-        <label for="transaction-form-element-date">Date</label>
-        <input type="date" name="date" value="{{ today }}" required id="transaction-form-element-date">
-        <button type="submit">Create Transaction</button>
-        <a href="#" onclick="toggleCreateTransactionModal()">Cancel</a>
+        <select name="account" required>
+            <option value="" hidden selected>Account</option>
+            {% for account in accounts %}
+                <option value="{{ account.id }}">{{ account.name }}</option>
+            {% endfor %}
+        </select>
+        <input type="text" name="description" placeholder="Description" required>
+        <input type="date" name="date" value="{{ today }}" required>
+        <button type="submit">Create Income</button>
+        <a href="#" onclick="toggleTransactionModal('income')">Cancel</a>
+    </form>
+</div>
+<a href="#" onclick="openTransactionModal('expense')">Add Expense</a>
+<div id="expense-form-container" class="modal-container">
+    <form id="form-create-expense" method="POST" action="{% url 'accounts:create_transaction' %}">
+        {% csrf_token %}
+        <input type="hidden" name="type" value="expense">
+        <input type="number" name="amount" placeholder="Amount" required>
+        <select name="category" required>
+            <option value="" hidden selected>Category</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+        </select>
+        <select name="subcategory" required>
+            <option value="" hidden selected>Subcategory</option>
+            {% for subcategory in subcategories %}
+                <option value="{{ subcategory.id }}" class="category-{{ subcategory.category.id }}">{{ subcategory.name }}</option>
+            {% endfor %}
+        </select>
+        <select name="account" required>
+            <option value="" hidden selected>Account</option>
+            {% for account in accounts %}
+                <option value="{{ account.id }}">{{ account.name }}</option>
+            {% endfor %}
+        </select>
+        <input type="text" name="description" placeholder="Description" required>
+        <input type="date" name="date" value="{{ today }}" required>
+        <button type="submit">Create Expense</button>
+        <a href="#" onclick="toggleTransactionModal('expense')">Cancel</a>
+    </form>
+</div>
+<a href="#" onclick="openTransactionModal('transfer')">Add Transfer</a>
+<div id="transfer-form-container" class="modal-container">
+    <form id="form-create-transfer" method="POST" action="{% url 'accounts:create_transaction' %}">
+        {% csrf_token %}
+        <input type="hidden" name="type" value="transfer">
+        <input type="number" name="amount" placeholder="Amount" required>
+        <select name="category" required>
+            <option value="" hidden selected>Category</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+        </select>
+        <select name="subcategory" required>
+            <option value="" hidden selected>Subcategory</option>
+            {% for subcategory in subcategories %}
+                <option value="{{ subcategory.id }}" class="category-{{ subcategory.category.id }}">{{ subcategory.name }}</option>
+            {% endfor %}
+        </select>
+        <select name="account" required>
+            <option value="" hidden selected>Account</option>
+            {% for account in accounts %}
+                <option value="{{ account.id }}">{{ account.name }}</option>
+            {% endfor %}
+        </select>
+        <select name="to_account" required>
+            <option value="" hidden selected>To Account</option>
+            {% for account in accounts %}
+                <option value="{{ account.id }}">{{ account.name }}</option>
+            {% endfor %}
+        </select>
+        <input type="text" name="description" placeholder="Description" required>
+        <input type="date" name="date" value="{{ today }}" required>
+        <button type="submit">Create Transfer</button>
+        <a href="#" onclick="toggleTransactionModal('transfer')">Cancel</a>
+    </form>
+</div>
+<a href="#" onclick="openTransactionModal('credit-card')">Add Credit Card Expense</a>
+<div id="credit-card-form-container" class="modal-container">
+    <form id="form-create-credit-card" method="POST" action="{% url 'creditcards:create_transaction' %}">
+        {% csrf_token %}
+        <input type="hidden" name="type" value="credit-card">
+        <input type="number" name="amount" placeholder="Amount" required>
+        <select name="category" required>
+            <option value="" hidden selected>Category</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+        </select>
+        <select name="subcategory" required>
+            <option value="" hidden selected>Subcategory</option>
+            {% for subcategory in subcategories %}
+                <option value="{{ subcategory.id }}" class="category-{{ subcategory.category.id }}">{{ subcategory.name }}</option>
+            {% endfor %}
+        </select>
+        <select name="credit_card" required>
+            <option value="" hidden selected>Credit Card</option>
+            {% for credit_card in credit_cards %}
+                <option value="{{ credit_card.id }}">{{ credit_card.name }}</option>
+            {% endfor %}
+        </select>
+        <input type="number" name="installments" placeholder="Installments" required>
+        <input type="text" name="description" placeholder="Description" required>
+        <input type="date" name="date" value="{{ today }}" required>
+        <button type="submit">Create Credit Card Expense</button>
+        <a href="#" onclick="toggleTransactionModal('credit-card')">Cancel</a>
     </form>
 </div>
 {% endblock %}
