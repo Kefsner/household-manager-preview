@@ -1,7 +1,7 @@
 from django.http import QueryDict
 
 from core.exceptions import SerializerException
-
+from datetime import datetime
 from decimal import Decimal
 
 class CreateCreditCardSerializer:
@@ -66,6 +66,7 @@ class CreateCreditCardTransactionSerializer:
         self.validate_category()
         self.validate_subcategory()
         self.validate_installments()
+        self.validate_date()
         self.validated_data = {
             'credit_card': self.credit_card,
             'description': self.description,
@@ -107,3 +108,12 @@ class CreateCreditCardTransactionSerializer:
             self.installments = int(self.installments)
         except:
             raise SerializerException({'installments_error': 'The field must be an integer'})
+        
+    def validate_date(self) -> None:
+        if not self.date:
+            raise SerializerException({'date_error': 'The field is required'})
+        
+        try:
+            self.date = datetime.strptime(self.date, '%Y-%m-%d').date()
+        except:
+            raise SerializerException({'date_error': 'The field must be a date in the format yyyy-mm-dd'})

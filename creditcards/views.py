@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.contrib import messages as msgs
 from django.db import IntegrityError
@@ -15,7 +16,7 @@ from core.logger import Logger
 
 import traceback
 
-class CreditCardView(View):
+class CreditCardView(LoginRequiredMixin, View):
     def get(self, request):
         try:
             creditcards = CreditCard.objects.filter(db=request.user.db)
@@ -35,7 +36,7 @@ class CreditCardView(View):
             )
             return render(request, 'core/error.html')
         
-class CreateCreditCardView(View):    
+class CreateCreditCardView(LoginRequiredMixin, View):
     def post(self, request):
         try:
             serializer = CreateCreditCardSerializer(data=request.POST)
@@ -60,7 +61,7 @@ class CreateCreditCardView(View):
             )
             return render(request, 'core/error.html')
         
-class DeleteCreditCardView(View):
+class DeleteCreditCardView(LoginRequiredMixin, View):
     def post(self, request, pk):
         try:
             credit_card = CreditCard.objects.get(id=pk)
@@ -76,7 +77,7 @@ class DeleteCreditCardView(View):
             )
             return render(request, 'core/error.html')
         
-class CreateTransactionView(View):
+class CreateTransactionView(LoginRequiredMixin, View):
     def post(self, request):
         try:
             serializer = CreateCreditCardTransactionSerializer(data=request.POST)

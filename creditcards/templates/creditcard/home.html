@@ -15,6 +15,7 @@
                 <th>Name</th>
                 <th>Owner</th>
                 <th>Limit</th>
+                <th>Remaining Limit</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -22,8 +23,9 @@
             {% for creditcard in creditcards %}
                 <tr>
                     <td>{{ creditcard.name }}</td>
-                    <td>{{ creditcard.user.username }}</td>
+                    <td>{{ creditcard.account.user.username }}</td>
                     <td>R$ {{ creditcard.limit }}</td>
+                    <td>R$ {{ creditcard.remaining_limit }}</td>
                     <td>
                         <a href="#" onclick="openDeleteCreditCardModal({{ creditcard.id }}, '{{ creditcard.name }}')">Delete</a>
                     </td>
