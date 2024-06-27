@@ -6,6 +6,8 @@ from core.models import MetaData
 from accounts.models import Account
 from categories.models import Category, Subcategory
 
+from decimal import Decimal
+
 class CreditCard(MetaData):
     name = models.CharField(max_length=100)
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
@@ -32,11 +34,9 @@ class CreditCard(MetaData):
                 credit_card_transaction__credit_card=self,
                 due_date=next_due_date,
                 paid=False
-            ).aggregate(total_amount=Sum('amount'))['total_amount'] or 0
-            print(next_bill_amount)
-            print(type(next_bill_amount))
-            return next_bill_amount
-        return 0
+            ).aggregate(total_amount=Sum('amount'))['total_amount'] or Decimal('0.00')
+            return next_bill_amount.quantize(Decimal('0.01'))
+        return Decimal('0.00')
 
 class CreditCardTransaction(MetaData):
     description = models.CharField(max_length=100, null=True)
