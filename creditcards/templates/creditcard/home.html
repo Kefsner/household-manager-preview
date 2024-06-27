@@ -27,7 +27,10 @@
                     <td>{{ creditcard.account.user.username }}</td>
                     <td>R$ {{ creditcard.limit }}</td>
                     <td>R$ {{ creditcard.remaining_limit }}</td>
-                    <td>R$ {{ creditcard.next_bill_amount }} on {{ creditcard.next_due_day }}</td>
+                    <td>
+                        R$ {{ creditcard.next_bill_amount }} on {{ creditcard.next_due_date }}
+                        <a href="#" onclick="openPayCreditCardModal({{ creditcard.id }}, '{{ creditcard.name }}', {{ creditcard.next_bill_amount }})">Pay Bill</a>
+                    </td>
                     <td>
                         <a href="#" onclick="openDeleteCreditCardModal({{ creditcard.id }}, '{{ creditcard.name }}')">Delete</a>
                     </td>
@@ -68,7 +71,23 @@
             <a href="#" onclick="toggleCreateCreditCardModal()">Cancel</a>
         </form>
     </div>
-
+    <div class="modal-container" id="pay-creditcard-modal">
+        <h2>Pay Bill</h2>
+        <p>Are you sure you want to pay the bill of <strong id="pay-creditcard-name"></strong>?</p>
+        <form id="pay-creditcard-form" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="creditcard" id="pay-creditcard-id">
+            <select name="account" required>
+                <option value="" hidden selected>Account</option>
+                {% for account in accounts %}
+                    <option value="{{ account.id }}">{{ account.name }}</option>
+                {% endfor %}
+            </select>
+            <input type="number" name="amount" placeholder="Amount" required>
+            <button type="submit">Pay Bill</button>
+            <a href="#" onclick="togglePayBillModal()">Cancel</a>
+        </form>
+    </div>
 {% endblock %}
 
 {% block scripts %}

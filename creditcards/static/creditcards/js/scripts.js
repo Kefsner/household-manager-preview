@@ -23,3 +23,18 @@ function toggleCreateCreditCardModal() {
   const modal = document.getElementById('create-creditcard-modal');
   modal.classList.toggle('show');
 }
+
+// ===== Pay Credit Card Modal =====
+function openPayCreditCardModal(creditCardId, creditCardName, creditCardBalance) {
+    const creditCard = document.getElementById('pay-creditcard-name');
+    creditCard.innerHTML = creditCardName;
+    const Form = document.getElementById('pay-creditcard-form');
+    Form.elements.namedItem('creditcard').value = creditCardId;
+    Form.action = '/creditcards/pay/';
+    togglePayCreditCardModal();
+}
+
+function togglePayCreditCardModal() {
+    const modal = document.getElementById('pay-creditcard-modal');
+    modal.classList.toggle('show');
+}

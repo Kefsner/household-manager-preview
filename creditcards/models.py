@@ -19,7 +19,7 @@ class CreditCard(MetaData):
         unique_together = ['name', 'account']
 
     @property
-    def next_due_day(self):
+    def next_due_date(self):
         next_due_date = CreditCardInstallment.objects.filter(
             credit_card_transaction__credit_card=self,
             paid=False
@@ -28,7 +28,7 @@ class CreditCard(MetaData):
     
     @property
     def next_bill_amount(self):
-        next_due_date = self.next_due_day
+        next_due_date = self.next_due_date
         if next_due_date:
             next_bill_amount = CreditCardInstallment.objects.filter(
                 credit_card_transaction__credit_card=self,

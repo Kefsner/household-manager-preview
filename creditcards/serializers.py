@@ -119,3 +119,37 @@ class CreateCreditCardTransactionSerializer:
             self.date = datetime.strptime(self.date, '%Y-%m-%d').date()
         except:
             raise SerializerException({'date_error': 'The field must be a date in the format yyyy-mm-dd'})
+        
+class PayCreditCardSerializer:
+    def __init__(self, data: QueryDict) -> None:
+        print(data)
+        self.credit_card = data.get('creditcard', None)
+        self.amount = data.get('amount', None)
+        self.account = data.get('account', None)
+        self.validate_data()
+
+    def validate_data(self) -> None:
+        self.validate_credit_card()
+        self.validate_amount()
+        self.validate_account()
+        self.validated_data = {
+            'credit_card': self.credit_card,
+            'amount': self.amount,
+            'account': self.account
+        }
+
+    def validate_credit_card(self) -> None:
+        if not self.credit_card:
+            raise SerializerException({'credit_card_error': 'The field is required'})
+        
+    def validate_amount(self) -> None:
+        if not self.amount:
+            raise SerializerException({'amount_error': 'The field is required'})
+        try:
+            self.amount = Decimal(self.amount)
+        except:
+            raise SerializerException({'amount_error': 'The field must be a number'})
+        
+    def validate_account(self) -> None:
+        if not self.account:
+            raise SerializerException({'account_error': 'The field is required'})

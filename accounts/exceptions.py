@@ -1,4 +1,4 @@
 from core.exceptions import CoreException
 
-class TransferException(CoreException):
+class InsufficientFundsException(CoreException):
     pass

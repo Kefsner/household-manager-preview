@@ -3,7 +3,7 @@ from django.db import transaction
 
 from users.models import User
 
-from accounts.exceptions import TransferException
+from accounts.exceptions import InsufficientFundsException
 from accounts.models import Account, Transaction
 
 from categories.models import Category, Subcategory
@@ -44,7 +44,7 @@ class AccountServices:
             to_account = Account.objects.get(id=self.data['to_account'])
             amount = self.data['amount']
             if from_account.balance < amount:
-                raise TransferException({'amount_error': 'Insufficient funds'})
+                raise InsufficientFundsException({'amount_error': 'Insufficient funds'})
             from_account.balance -= amount
             to_account.balance += amount
             from_account.save(request)

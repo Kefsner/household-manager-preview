@@ -11,4 +11,6 @@ urlpatterns = [
     path(f'{settings.DELETE_URL}/creditcard/<int:pk>/', DeleteCreditCardView.as_view(), name='delete'),
 
     path('transactions/create/', CreateTransactionView.as_view(), name='create_transaction'),
+
+    path('pay/', PayCreditCardView.as_view(), name='pay'),
 ]

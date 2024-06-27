@@ -6,8 +6,8 @@ from django.views import View
 
 from accounts.models import Account
 
+from creditcards.serializers import CreateCreditCardSerializer, PayCreditCardSerializer
 from creditcards.serializers import CreateCreditCardTransactionSerializer
-from creditcards.serializers import CreateCreditCardSerializer
 from creditcards.exceptions import CreditCardException
 from creditcards.services import CreditCardServices
 from creditcards.models import CreditCard
@@ -95,6 +95,27 @@ class CreateTransactionView(LoginRequiredMixin, View):
                 exception=e,
                 request=request,
                 data=request.POST,
+                traceback=traceback.format_exc()
+            )
+            return render(request, 'core/error.html')
+        
+class PayCreditCardView(LoginRequiredMixin, View):
+    def post(self, request):
+        try:
+            serializer = PayCreditCardSerializer(data=request.POST)
+            data = serializer.validated_data
+            services = CreditCardServices(data)
+            services.pay_credit_card(request)
+            msgs.success(request, 'Credit card paid successfully')
+            return redirect('creditcards:home')
+        except CreditCardException as e:
+            msgs.error(request, str(e))
+            return redirect('creditcards:home')
+        except Exception as e:
+            logger = Logger()
+            logger.log(
+                exception=e,
+                request=request,
                 traceback=traceback.format_exc()
             )
             return render(request, 'core/error.html')

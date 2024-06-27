@@ -5,6 +5,7 @@ from creditcards.models import CreditCard, CreditCardTransaction, CreditCardInst
 from creditcards.exceptions import CreditCardException
 from accounts.models import Account
 from categories.models import Category, Subcategory
+from categories.services import DefaultCategoriesServices
 
 from dateutil.relativedelta import relativedelta
 from decimal import Decimal, getcontext
@@ -85,3 +86,43 @@ class CreditCardServices:
                 installment.installment_number = i
                 installment.save(request)
         return 'Transaction created successfully.'
+    
+    def pay_credit_card(self, request: HttpRequest) -> str:
+        with transaction.atomic():
+            credit_card = CreditCard.objects.get(id=self.data['credit_card'])
+            next_bill_amount = credit_card.next_bill_amount
+            account = Account.objects.get(id=self.data['account'])
+            if account.balance < self.data['amount']:
+                raise CreditCardException('Insufficient balance.')
+            account.balance -= self.data['amount']
+            account.save(request)
+            credit_card.remaining_limit += self.data['amount']
+            if next_bill_amount == self.data['amount']:
+                self._pay_credit_card(request, credit_card)
+            else:
+                self._pay_credit_card(request, credit_card, partial=True)
+            credit_card.save(request)
+        return 'Credit card paid successfully.'
+    
+    def _pay_credit_card(self, request: HttpRequest, credit_card: CreditCard, partial: bool = False) -> None:
+        for installment in CreditCardInstallment.objects.filter(
+            credit_card_transaction__credit_card=credit_card,
+            paid=False,
+            due_date=credit_card.next_due_date):
+            installment.paid = True
+            installment.save(request)
+        if partial:
+            remaining_amount = credit_card.next_bill_amount - self.data['amount']
+            installment = CreditCardInstallment()
+            installment.amount = remaining_amount
+            installment.paid = False
+            installment.credit_card_transaction = CreditCardTransaction()
+            installment.credit_card_transaction.credit_card = credit_card
+            installment.credit_card_transaction.description = 'Partial payment'
+            installment.credit_card_transaction.amount = remaining_amount
+            installment.credit_card_transaction.date = datetime.date.today()
+            installment.credit_card_transaction.installments = 1
+            installment.credit_card_transaction.save(request)
+            installment.due_date = credit_card.next_due_date
+            installment.installment_number = 1
+            installment.save(request)

@@ -7,8 +7,8 @@ from django.views import View
 from users.models import User
 
 from accounts.serializers import CreateAccountSerializer, CreateTransactionSerializer
+from accounts.exceptions import InsufficientFundsException
 from accounts.serializers import CreateTransferSerializer
-from accounts.exceptions import TransferException
 from accounts.services import AccountServices
 from accounts.models import Account
 
@@ -116,7 +116,7 @@ class CreateTransferView(LoginRequiredMixin, View):
             for field, error in e.errors.items():
                 msgs.error(request, error, extra_tags=field)
             return redirect('base:home')
-        except TransferException as e:
+        except InsufficientFundsException as e:
             msgs.error(request, str(e))
             return redirect('base:home')
         except Exception as e:

@@ -6,9 +6,9 @@ class Category(MetaData):
     CATEGORY_TYPES = (
         ('income', 'Income'),
         ('expense', 'Expense'),
-        ('transfer', 'Transfer'),
+        ('transfer', 'Transfer')
     )
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100, unique=True, null=True)
     type = models.CharField(choices=CATEGORY_TYPES, max_length=10)
 
 class Subcategory(MetaData):
