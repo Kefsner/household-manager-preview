@@ -90,7 +90,7 @@
 </div>
 <a href="#" onclick="openTransactionModal('transfer')">Add Transfer</a>
 <div id="transfer-form-container" class="modal-container">
-    <form id="form-create-transfer" method="POST" action="{% url 'accounts:create_transaction' %}">
+    <form id="form-create-transfer" method="POST" action="{% url 'accounts:create_transfer' %}">
         {% csrf_token %}
         <input type="hidden" name="type" value="transfer">
         <input type="number" name="amount" placeholder="Amount" required>

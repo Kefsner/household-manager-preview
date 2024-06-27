@@ -2,7 +2,10 @@ from django.http import HttpRequest
 from django.db import transaction
 
 from users.models import User
+
+from accounts.exceptions import TransferException
 from accounts.models import Account, Transaction
+
 from categories.models import Category, Subcategory
 
 class AccountServices:
@@ -34,3 +37,16 @@ class AccountServices:
             _transaction.account.balance += _transaction.amount
             _transaction.account.save(request)
         return 'Transaction created successfully.'
+    
+    def create_transfer(self, request: HttpRequest) -> str:
+        with transaction.atomic():
+            from_account = Account.objects.get(id=self.data['account'])
+            to_account = Account.objects.get(id=self.data['to_account'])
+            amount = self.data['amount']
+            if from_account.balance < amount:
+                raise TransferException({'amount_error': 'Insufficient funds'})
+            from_account.balance -= amount
+            to_account.balance += amount
+            from_account.save(request)
+            to_account.save(request)
+        return 'Transfer created successfully.'

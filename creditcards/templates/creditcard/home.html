@@ -16,6 +16,7 @@
                 <th>Owner</th>
                 <th>Limit</th>
                 <th>Remaining Limit</th>
+                <th>Next Bill</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -26,6 +27,7 @@
                     <td>{{ creditcard.account.user.username }}</td>
                     <td>R$ {{ creditcard.limit }}</td>
                     <td>R$ {{ creditcard.remaining_limit }}</td>
+                    <td>R$ {{ creditcard.next_bill_amount }} on {{ creditcard.next_due_day }}</td>
                     <td>
                         <a href="#" onclick="openDeleteCreditCardModal({{ creditcard.id }}, '{{ creditcard.name }}')">Delete</a>
                     </td>

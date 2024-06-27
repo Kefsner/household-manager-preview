@@ -7,6 +7,8 @@ from django.views import View
 from users.models import User
 
 from accounts.serializers import CreateAccountSerializer, CreateTransactionSerializer
+from accounts.serializers import CreateTransferSerializer
+from accounts.exceptions import TransferException
 from accounts.services import AccountServices
 from accounts.models import Account
 
@@ -91,6 +93,31 @@ class CreateTransactionView(LoginRequiredMixin, View):
         except SerializerException as e:
             for field, error in e.errors.items():
                 msgs.error(request, error, extra_tags=field)
+            return redirect('base:home')
+        except Exception as e:
+            logger = Logger()
+            logger.log(
+                exception=e,
+                request=request,
+                data=request.POST,
+                traceback=traceback.format_exc()
+            )
+            return render(request, 'core/error.html')
+        
+class CreateTransferView(LoginRequiredMixin, View):    
+    def post(self, request):
+        try:
+            serializer = CreateTransferSerializer(data=request.POST)
+            data = serializer.validated_data
+            services = AccountServices(data)
+            msgs.success(request, services.create_transfer(request))
+            return redirect('base:home')
+        except SerializerException as e:
+            for field, error in e.errors.items():
+                msgs.error(request, error, extra_tags=field)
+            return redirect('base:home')
+        except TransferException as e:
+            msgs.error(request, str(e))
             return redirect('base:home')
         except Exception as e:
             logger = Logger()

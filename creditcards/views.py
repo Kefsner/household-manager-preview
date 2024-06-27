@@ -8,6 +8,7 @@ from accounts.models import Account
 
 from creditcards.serializers import CreateCreditCardTransactionSerializer
 from creditcards.serializers import CreateCreditCardSerializer
+from creditcards.exceptions import CreditCardException
 from creditcards.services import CreditCardServices
 from creditcards.models import CreditCard
 
@@ -84,7 +85,10 @@ class CreateTransactionView(LoginRequiredMixin, View):
             data = serializer.validated_data                   
             services = CreditCardServices(data)
             msgs.success(request, services.create_transaction(request))
-            return redirect('creditcards:home')
+            return redirect('base:home')
+        except CreditCardException as e:
+            msgs.error(request, str(e))
+            return redirect('base:home')
         except Exception as e:
             logger = Logger()
             logger.log(
