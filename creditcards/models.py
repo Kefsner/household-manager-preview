@@ -33,6 +33,8 @@ class CreditCard(MetaData):
                 due_date=next_due_date,
                 paid=False
             ).aggregate(total_amount=Sum('amount'))['total_amount'] or 0
+            print(next_bill_amount)
+            print(type(next_bill_amount))
             return next_bill_amount
         return 0
 

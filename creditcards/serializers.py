@@ -39,6 +39,8 @@ class CreateCreditCardSerializer:
             self.due_day = int(self.due_day)
         except:
             raise SerializerException({'due_day_error': 'The field must be an integer'})
+        if self.due_day < 1 or self.due_day > 31:
+            raise SerializerException({'due_day_error': 'The field must be a number between 1 and 31'})
         
     def validate_limit(self) -> None:
         if not self.limit:

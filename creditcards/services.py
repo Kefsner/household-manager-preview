@@ -7,8 +7,11 @@ from accounts.models import Account
 from categories.models import Category, Subcategory
 
 from dateutil.relativedelta import relativedelta
+from decimal import Decimal, getcontext
 import datetime
 import holidays
+
+getcontext().prec = 2
 
 class CreditCardServices:
     def __init__(self, data):
@@ -33,24 +36,15 @@ class CreditCardServices:
 
     @staticmethod
     def generate_due_dates(due_day: int, date: datetime.date, total_installments: int):
-        # Calculate the initial due date for the first installment
         due = datetime.date(date.year, date.month, due_day)
         due = CreditCardServices.adjust_for_holidays_and_weekends(due)
-
-        # Check if the transaction date is after the initial due date and adjust
         if date > due:
             due += relativedelta(months=1)
-
-        # Calculate closing date and adjust if necessary
         closing_date = due - relativedelta(days=7)
         if date > closing_date:
             due += relativedelta(months=1)
-
-        # Adjust for holidays and weekends for the first installment
         due = CreditCardServices.adjust_for_holidays_and_weekends(due)
         yield due  # Yield the first installment's due date
-
-        # Generate due dates for subsequent installments by simply adding one month to the last due date
         for _ in range(1, total_installments):
             due += relativedelta(months=1)
             due = CreditCardServices.adjust_for_holidays_and_weekends(due)
@@ -72,7 +66,10 @@ class CreditCardServices:
             _transaction.date = self.data['date']
             _transaction.installments = self.data['installments']
             _transaction.save(request)
-            amount_per_installment = _transaction.amount / _transaction.installments
+            
+            basic_installment_amount = (_transaction.amount / _transaction.installments).quantize(Decimal('0.01'))
+            total_calculated_amount = basic_installment_amount * _transaction.installments
+            remainder = _transaction.amount - total_calculated_amount
             for i, due_date in enumerate(CreditCardServices.generate_due_dates(
                                             credit_card.due_day,
                                             self.data['date'],
@@ -81,7 +78,9 @@ class CreditCardServices:
                     raise CreditCardException('Due date cannot be in the past.')
                 installment = CreditCardInstallment()
                 installment.credit_card_transaction = _transaction
-                installment.amount = amount_per_installment
+                installment.amount = basic_installment_amount
+                if i == _transaction.installments:
+                    installment.amount += remainder
                 installment.due_date = due_date
                 installment.installment_number = i
                 installment.save(request)
