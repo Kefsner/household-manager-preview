@@ -1,13 +1,3 @@
-// ===== Create Transaction Modal =====
-function openTransactionModal(type) {
-    toggleTransactionModal(type);
-}
-
-function toggleTransactionModal(type) {
-    const modal = document.getElementById(type + "-form-container");
-    modal.classList.toggle('show');
-}
-
 document.addEventListener('DOMContentLoaded', function() {
     function updateSubcategories(categorySelect, subcategorySelect, subcategoryOptions) {
         var selectedCategory = categorySelect.value;
@@ -39,3 +29,27 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+// ===== Create Transaction Modal =====
+function openTransactionModal(type) {
+    toggleOpenModelButton();
+    toggleTransactionModal(type);
+}
+
+function toggleTransactionModal(type) {
+    const modal = document.getElementById(type + "-form-container");
+    modal.classList.toggle('show');
+}
+
+function toggleOpenModelButton() {
+    const modalButtons = document.querySelector('#transaction-modal');
+    modalButtons.classList.toggle('show');
+    const circleButton = document.querySelector('#circle-button');
+    if (circleButton.innerHTML === '+') {
+        circleButton.innerHTML = '-';
+        circleButton.classList.add('active');
+    } else {
+        circleButton.innerHTML = '+';
+        circleButton.classList.remove('active');
+    }
+}

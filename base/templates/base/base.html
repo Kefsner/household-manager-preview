@@ -1,11 +1,11 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'base/css/styles.css' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'base/img/favicon.ico' %}">
     {% block styles %}
     {% endblock styles %}
     <title>{% block title %}{% endblock title %}</title>
@@ -13,21 +13,38 @@
 <body>
     {% if user.is_authenticated %}
     <header>
-        <p>Welcome, {{ user.username }}!</p>
+        <div class="header-title">
+            <img src="{% static 'base/img/logo.png' %}" alt="House Management Logo" id="header-logo" />
+            <h1>Household Manager</h1>
+        </div>
         <nav>
-            <a href="{% url 'base:home' %}">Home</a>
-            <a href="{% url 'accounts:home' %}">Accounts</a>
-            <a href="{% url 'categories:home' %}">Categories</a>
-            <a href="{% url 'creditcards:home' %}">Credit Cards</a>
-            <a href="{% url 'authentication:logout' %}">Sair</a>
+            <ul class="nav-links">
+                <li class="nav-link">
+                    <a href="{% url 'base:home' %}">Home</a>
+                </li>
+                <li class="nav-link">
+                    <a href="{% url 'accounts:home' %}">Accounts</a>
+                </li>
+                <li class="nav-link">
+                    <a href="{% url 'categories:home' %}">Categories</a>
+                </li>
+                <li class="nav-link">
+                    <a href="{% url 'creditcards:home' %}">Credit Cards</a>
+                </li>
+                <li class="nav-link">
+                    <a href="{% url 'authentication:logout' %}">Sair</a>
+                </li>
+            </ul>
         </nav>
     </header>
     {% endif %}
-    <main>
+    <body>
         {% block content %}
         {% endblock content %}
-    </main>
+        {% include "base/modal.html" %}
+    </body>
     {% block scripts %}
     {% endblock scripts %}
+    <script src="{% static 'base/js/scripts.js' %}"></script>
 </body>
 </html>
