@@ -5,12 +5,10 @@ from creditcards.models import CreditCard, CreditCardTransaction, CreditCardInst
 from creditcards.exceptions import CreditCardException
 from accounts.models import Account
 from categories.models import Category, Subcategory
-from categories.services import DefaultCategoriesServices
 
 from dateutil.relativedelta import relativedelta
 from decimal import Decimal, getcontext
 import datetime
-import holidays
 
 getcontext().prec = 2
 
@@ -28,27 +26,21 @@ class CreditCardServices:
             credit_card.remaining_limit = self.data['limit']
             credit_card.save(request)
         return 'Credit card created successfully.'
-    
-    @staticmethod
-    def adjust_for_holidays_and_weekends(date: datetime.date) -> datetime.date:
-        while date in holidays.Brazil() or date.weekday() in [5, 6]:
-            date += datetime.timedelta(days=1)
-        return date
 
     @staticmethod
     def generate_due_dates(due_day: int, date: datetime.date, total_installments: int):
         due = datetime.date(date.year, date.month, due_day)
-        due = CreditCardServices.adjust_for_holidays_and_weekends(due)
+        due = CreditCard.adjust_for_holidays_and_weekends(due)
         if date > due:
             due += relativedelta(months=1)
         closing_date = due - relativedelta(days=7)
         if date > closing_date:
             due += relativedelta(months=1)
-        due = CreditCardServices.adjust_for_holidays_and_weekends(due)
+        due = CreditCard.adjust_for_holidays_and_weekends(due)
         yield due  # Yield the first installment's due date
         for _ in range(1, total_installments):
             due += relativedelta(months=1)
-            due = CreditCardServices.adjust_for_holidays_and_weekends(due)
+            due = CreditCard.adjust_for_holidays_and_weekends(due)
             yield due  # Yield the next installment's due date
 
     def create_transaction(self, request: HttpRequest) -> str:
@@ -90,6 +82,12 @@ class CreditCardServices:
     def pay_credit_card(self, request: HttpRequest) -> str:
         with transaction.atomic():
             credit_card = CreditCard.objects.get(id=self.data['credit_card'])
+            # Pay only if is closed. That is, today is between the closing date and the due date.
+            if not (
+                (credit_card.next_due_date - relativedelta(days=7) <= datetime.date.today()) and
+                (datetime.date.today() <= credit_card.next_due_date)
+            ):
+                raise CreditCardException('Credit card is not closed.')
             next_bill_amount = credit_card.next_bill_amount
             account = Account.objects.get(id=self.data['account'])
             if account.balance < self.data['amount']:
@@ -120,9 +118,24 @@ class CreditCardServices:
             installment.credit_card_transaction.credit_card = credit_card
             installment.credit_card_transaction.description = 'Partial payment'
             installment.credit_card_transaction.amount = remaining_amount
+            installment.credit_card_transaction.category = self._get_partial_payment_category(request)
             installment.credit_card_transaction.date = datetime.date.today()
             installment.credit_card_transaction.installments = 1
             installment.credit_card_transaction.save(request)
             installment.due_date = credit_card.next_due_date
             installment.installment_number = 1
             installment.save(request)
+            if remaining_amount > 0:
+                print('Add interest/fee here.')
+
+    @staticmethod
+    def _get_partial_payment_category(request: HttpRequest) -> Category:
+        try:
+            category = Category.objects.get(name='partial_payment')
+        except Category.DoesNotExist:
+            category = Category()
+            category.name = 'partial_payment'
+            category.type = 'system'
+            category.save(request)
+        finally:
+            return category

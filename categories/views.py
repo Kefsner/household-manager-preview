@@ -16,13 +16,7 @@ import traceback
 class CategoriesView(LoginRequiredMixin, View):
     def get(self, request):
         try:
-            categories = Category.objects.filter(db=request.user.db)
-            context = { 'categories': categories }
-            messages = list(msgs.get_messages(request))
-            for message in messages:
-                field = message.tags.split()[0]
-                context[field] = message.message
-            return render(request, 'categories/home.html', context)
+            return render(request, 'categories/home.html')
         except Exception as e:
             logger = Logger()
             logger.log(

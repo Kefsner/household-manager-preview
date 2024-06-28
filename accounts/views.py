@@ -20,13 +20,8 @@ import traceback
 class AccountsView(LoginRequiredMixin, View):
     def get(self, request):
         try:
-            accounts = Account.objects.filter(db=request.user.db)
             users = User.objects.filter(db=request.user.db)
-            context = { 'accounts': accounts, 'users': users }
-            messages = list(msgs.get_messages(request))
-            for message in messages:
-                field = message.tags.split()[0]
-                context[field] = message.message
+            context = { 'users': users }
             return render(request, 'accounts/home.html', context)
         except Exception as e:
             logger = Logger()

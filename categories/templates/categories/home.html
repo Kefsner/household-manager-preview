@@ -70,54 +70,66 @@
     <a href="#" onclick="openCreateDefaultCategoriesModal()">Create Default Categories</a>
 
     <div class="modal-container" id="delete-category-modal">
+        <form id="delete-category-form" method="POST">
         <h2>Delete Category</h2>
         <p>Are you sure you want to delete the category <strong id="category-name"></strong>?</p>
-        <form id="delete-category-form" method="POST">
             {% csrf_token %}
-            <button type="submit">Delete</button>
+            <button class="form-button delete" type="submit">Delete</button>
+            <button class="form-button" type="button" onclick="toggleDeleteCategoryModal()">Cancel</button>
         </form>
-        <a href="#" onclick="toggleDeleteCategoryModal()">Cancel</a>
     </div>
     <div class="modal-container" id="create-category-modal">
         <form method="POST" id="create-category-form" action="{% url 'categories:create' %}">
             {% csrf_token %}
-            <input type="text" name="name" placeholder="Category Name" required>
-            <select name="type" required>
-                <option value="" hidden selected>Category Type</option>
-                <option value="income">Income</option>
-                <option value="expense">Expense</option>
-            </select>
-            <button type="submit">Create Category</button>
-            <a href="#" onclick="toggleCreateCategoryModal()">Cancel</a>
+            <div class="form-input-container">
+                <input type="text" name="name" placeholder="" required class="form-input" id="create-category-name">
+                <label for="create-category-name" class="form-input-label">Category Name</label>
+            </div>
+            <div class="form-select-container">
+                <select required name="type" id="create-category-type" class="form-select">
+                    <option value="" hidden selected>Category Type</option>
+                    <option value="income">Income</option>
+                    <option value="expense">Expense</option>
+                </select>
+                <label for="create-category-type" class="form-select-label">Category Type</label>
+            </div>
+            <button class="form-button" type="submit">Create Category</button>
+            <button class="form-button" type="button" onclick="toggleCreateCategoryModal()">Cancel</button>
         </form>
     </div>
     <div class="modal-container" id="add-subcategory-modal">
+        <form id="add-subcategory-form" method="POST">
         <h2>Add Subcategory</h2>
         <p>Add a subcategory to the category <strong id="subcategory-category-name"></strong>.</p>
-        <form id="add-subcategory-form" method="POST">
             {% csrf_token %}
-            <input type="text" name="name" placeholder="Subcategory Name" required>
-            <input type="text" name="description" placeholder="Subcategory Description" required>
-            <button type="submit">Add Subcategory</button>
-            <a href="#" onclick="toggleAddSubcategoryModal()">Cancel</a>
+            <div class="form-input-container">
+                <input type="text" name="name" placeholder="" required class="form-input" id="create-subcategory-name">
+                <label for="create-subcategory-name" class="form-input-label">Subcategory Name</label>
+            </div>
+            <div class="form-input-container">
+                <input type="text" name="description" placeholder="" required class="form-input" id="create-subcategory-description">
+                <label for="create-subcategory-description" class="form-input-label">Subcategory Description</label>
+            </div>
+            <button class="form-button" type="submit">Add Subcategory</button>
+            <button class="form-button" type="button" onclick="toggleAddSubcategoryModal()">Cancel</button>
         </form>
     </div>
     <div class="modal-container" id="delete-subcategory-modal">
+        <form id="delete-subcategory-form" method="POST">
         <h2>Delete Subcategory</h2>
         <p>Are you sure you want to delete the subcategory <strong id="subcategory-name"></strong>?</p>
-        <form id="delete-subcategory-form" method="POST">
             {% csrf_token %}
-            <button type="submit">Delete</button>
-            <a href="#" onclick="toggleDeleteSubcategoryModal()">Cancel</a>
+            <button class="form-button delete" type="submit">Delete</button>
+            <button class="form-button" type="button" onclick="toggleDeleteSubcategoryModal()">Cancel</button>
         </form>
     </div>
     <div class="modal-container" id="create-default-categories-modal">
+        <form id="create-default-categories-form" method="POST" action="{% url 'categories:create-default' %}">
         <h2>Create Default Categories</h2>
         <p>Are you sure you want to create the default categories?</p>
-        <form id="create-default-categories-form" method="POST" action="{% url 'categories:create-default' %}">
             {% csrf_token %}
-            <button type="submit">Create Default Categories</button>
-            <a href="#" onclick="toggleCreateDefaultCategoriesModal()">Cancel</a>
+            <button class="form-button" type="submit">Create Default Categories</button>
+            <button class="form-button" type="button" onclick="toggleCreateDefaultCategoriesModal()">Cancel</button>
         </form>
     </div>
 {% endblock %}

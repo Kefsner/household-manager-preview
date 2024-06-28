@@ -6,7 +6,12 @@ from core.models import MetaData
 from accounts.models import Account
 from categories.models import Category, Subcategory
 
+from dateutil.relativedelta import relativedelta
+
 from decimal import Decimal
+
+import datetime
+import holidays
 
 class CreditCard(MetaData):
     name = models.CharField(max_length=100)
@@ -18,13 +23,19 @@ class CreditCard(MetaData):
     class Meta:
         unique_together = ['name', 'account']
 
+    @staticmethod
+    def adjust_for_holidays_and_weekends(date: datetime.date) -> datetime.date:
+        while date in holidays.Brazil() or date.weekday() in [5, 6]:
+            date += datetime.timedelta(days=1)
+        return date
+
     @property
     def next_due_date(self):
-        next_due_date = CreditCardInstallment.objects.filter(
-            credit_card_transaction__credit_card=self,
-            paid=False
-        ).aggregate(next_due_date=Min('due_date'))['next_due_date']
-        return next_due_date
+        today = datetime.date.today()
+        due = datetime.date(today.year, today.month, self.due_day)
+        if today > due:
+            due += relativedelta(months=1)
+        return self.adjust_for_holidays_and_weekends(due)
     
     @property
     def next_bill_amount(self):

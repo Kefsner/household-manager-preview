@@ -47,45 +47,63 @@
     <a href="#" onclick="openCreateCreditCardModal()">Create Credit Card</a>
 
     <div class="modal-container" id="delete-creditcard-modal">
+        <form id="delete-creditcard-form" method="POST">
         <h2>Delete Credit Card</h2>
         <p>Are you sure you want to delete the credit card <strong id="creditcard-name"></strong>?</p>
-        <form id="delete-creditcard-form" method="POST">
             {% csrf_token %}
-            <button type="submit">Delete</button>
-            <a href="#" onclick="toggleDeleteCreditCardModal()">Cancel</a>
+            <button class="form-button delete" type="submit">Delete</button>
+            <button class="form-button" type="button" onclick="toggleDeleteCreditCardModal()">Cancel</button>
         </form>
     </div>
     <div class="modal-container" id="create-creditcard-modal">
         <form method="POST" id="create-creditcard-form" action="{% url 'creditcards:create' %}">
             {% csrf_token %}
-            <input type="text" name="name" placeholder="Credit Card Name" required>
-            <select name="account" required>
-                <option value="" hidden selected>Account</option>
-                {% for account in accounts %}
-                    <option value="{{ account.id }}">{{ account.name }}</option>
-                {% endfor %}
-            </select>
-            <input type="number" name="due_day" placeholder="Due Day" required>
-            <input type="number" name="limit" placeholder="Limit" required>
-            <button type="submit">Create Credit Card</button>
-            <a href="#" onclick="toggleCreateCreditCardModal()">Cancel</a>
+            <div class="form-input-container">
+                <input type="text" name="name" placeholder="" required class="form-input" id="create-creditcard-name">
+                <label for="create-creditcard-name" class="form-input-label">Credit Card Name</label>
+            </div>
+            <div class="form-select-container">
+                <select name="account" required class="form-select" id="create-creditcard-account">
+                    <option value="" hidden selected>Account</option>
+                    {% for account in accounts %}
+                        <option value="{{ account.id }}">{{ account.name }}</option>
+                    {% endfor %}
+                </select>
+                <label for="create-creditcard-account" class="form-select-label">Account</label>
+            </div>
+            <div class="form-input-container">
+                <input type="number" name="due_day" placeholder="" required class="form-input" id="create-creditcard-due-day">
+                <label for="create-creditcard-due-day" class="form-input-label">Due Day</label>
+            </div>
+            <div class="form-input-container">
+                <input type="number" name="limit" placeholder="" required class="form-input" id="create-creditcard-limit" step="0.01">
+                <label for="create-creditcard-limit" class="form-input-label">Limit</label>
+            </div>
+            <button class="form-button" type="submit">Create Credit Card</button>
+            <button class="form-button" type="button" onclick="toggleCreateCreditCardModal()">Cancel</button>
         </form>
     </div>
     <div class="modal-container" id="pay-creditcard-modal">
+        <form id="pay-creditcard-form" method="POST">
         <h2>Pay Bill</h2>
         <p>Are you sure you want to pay the bill of <strong id="pay-creditcard-name"></strong>?</p>
-        <form id="pay-creditcard-form" method="POST">
             {% csrf_token %}
             <input type="hidden" name="creditcard" id="pay-creditcard-id">
-            <select name="account" required>
-                <option value="" hidden selected>Account</option>
-                {% for account in accounts %}
-                    <option value="{{ account.id }}">{{ account.name }}</option>
-                {% endfor %}
-            </select>
-            <input type="number" name="amount" placeholder="Amount" required>
-            <button type="submit">Pay Bill</button>
-            <a href="#" onclick="togglePayBillModal()">Cancel</a>
+            <div class="form-input-container">
+                <input type="number" name="amount" placeholder="" required class="form-input" id="pay-creditcard-amount" step="0.01" min="0.01">
+                <label for="pay-creditcard-amount" class="form-input-label">Amount</label>
+            </div>
+            <div class="form-select-container">
+                <select name="account" required class="form-select" id="pay-creditcard-account">
+                    <option value="" hidden selected>Account</option>
+                    {% for account in accounts %}
+                        <option value="{{ account.id }}">{{ account.name }}</option>
+                    {% endfor %}
+                </select>
+                <label for="pay-creditcard-account" class="form-select-label">Account</label>
+            </div>
+            <button class="form-button" type="submit">Pay Bill</button>
+            <button class="form-button" type="button" onclick="togglePayCreditCardModal()">Cancel</button>
         </form>
     </div>
 {% endblock %}

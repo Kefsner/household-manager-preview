@@ -227,7 +227,7 @@ nav {
     content: '';
     position: absolute;
     top: 50%;
-    right: 1rem;
+    right: 22px;
     transform: translateY(-50%);
     pointer-events: none;
     width: 0;
@@ -265,6 +265,14 @@ nav {
 
 .form-button[type="submit"]:hover {
     background-color: #33a9a5;
+}
+
+.form-button[type="submit"].delete {
+    background-color: #e60000;
+}
+
+.form-button[type="submit"].delete:hover {
+    background-color: #ac0000;
 }
 
 .form-button[type="button"] {

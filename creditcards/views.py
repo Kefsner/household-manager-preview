@@ -4,8 +4,6 @@ from django.contrib import messages as msgs
 from django.db import IntegrityError
 from django.views import View
 
-from accounts.models import Account
-
 from creditcards.serializers import CreateCreditCardSerializer, PayCreditCardSerializer
 from creditcards.serializers import CreateCreditCardTransactionSerializer
 from creditcards.exceptions import CreditCardException
@@ -20,14 +18,7 @@ import traceback
 class CreditCardView(LoginRequiredMixin, View):
     def get(self, request):
         try:
-            creditcards = CreditCard.objects.filter(db=request.user.db)
-            accounts = Account.objects.filter(db=request.user.db)
-            context = { 'creditcards': creditcards, 'accounts': accounts }
-            messages = list(msgs.get_messages(request))
-            for message in messages:
-                field = message.tags.split()[0]
-                context[field] = message.message
-            return render(request, 'creditcard/home.html', context)
+            return render(request, 'creditcard/home.html')
         except Exception as e:
             logger = Logger()
             logger.log(

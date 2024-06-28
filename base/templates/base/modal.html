@@ -208,15 +208,15 @@
             {% endif %}
         </div>
         <div class="form-select-container">
-            <select name="account" required class="form-select" id="credit-card-account">
-                <option value="" hidden selected>Account</option>
-                {% for account in accounts %}
-                    <option value="{{ account.id }}">{{ account.name }}</option>
+            <select name="credit_card" required class="form-select" id="credit-card-card">
+                <option value="" hidden selected>Credit Card</option>
+                {% for creditcard in creditcards %}
+                    <option value="{{ creditcard.id }}">{{ creditcard.name }}</option>
                 {% endfor %}
             </select>
-            <label for="credit-card-account" class="form-select-label">Account</label>
-            {% if form.errors.account %}
-                <span class="form-select error">{{ form.errors.account }}</span>
+            <label for="credit-card-card" class="form-select-label">Credit Card</label>
+            {% if form.errors.credit_card %}
+                <span class="form-select error">{{ form.errors.credit_card }}</span>
             {% endif %}
         </div>
         <div class="form-input-container">
@@ -231,6 +231,13 @@
             <label for="credit-card-description" class="form-input-label">Description</label>
             {% if form.errors.description %}
                 <span class="form-input error">{{ form.errors.description }}</span>
+            {% endif %}
+        </div>
+        <div class="form-input-container">
+            <input type="date" name="date" value="{{ today }}" required id="credit-card-date" class="form-input">
+            <label for="credit-card-date" class="form-input-label">Date</label>
+            {% if form.errors.date %}
+                <span class="form-input error">{{ form.errors.date }}</span>
             {% endif %}
         </div>
         <button class="form-button" type="submit">Create Credit Card Expense</button>

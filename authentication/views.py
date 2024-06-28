@@ -19,15 +19,7 @@ class LoginView(View):
         try:
             if request.user.is_authenticated:
                 return redirect('base:home')
-            messages = list(msgs.get_messages(request))
-            context = {}
-            if messages and messages[-1].message == 'register':
-                context['is_register'] = True
-                messages.pop()
-            for message in messages:
-                field = message.tags.split()[0]
-                context[field] = message.message
-            return render(request, self.template_name, context)
+            return render(request, self.template_name)
         except Exception as e:
             logger = Logger()
             logger.log(
