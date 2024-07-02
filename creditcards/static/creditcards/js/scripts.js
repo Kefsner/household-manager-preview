@@ -25,7 +25,7 @@ function toggleCreateCreditCardModal() {
 }
 
 // ===== Pay Credit Card Modal =====
-function openPayCreditCardModal(creditCardId, creditCardName, creditCardBalance) {
+function openPayCreditCardModal(creditCardId, creditCardName) {
     const creditCard = document.getElementById('pay-creditcard-name');
     creditCard.innerHTML = creditCardName;
     const Form = document.getElementById('pay-creditcard-form');

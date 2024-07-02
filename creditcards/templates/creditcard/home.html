@@ -29,7 +29,7 @@
                     <td>R$ {{ creditcard.remaining_limit }}</td>
                     <td>
                         R$ {{ creditcard.next_bill_amount }} on {{ creditcard.next_due_date }}
-                        <a href="#" onclick="openPayCreditCardModal({{ creditcard.id }}, '{{ creditcard.name }}', {{ creditcard.next_bill_amount }})">Pay Bill</a>
+                        <a href="#" onclick="openPayCreditCardModal({{ creditcard.id }}, '{{ creditcard.name }}')">Pay Bill</a>
                     </td>
                     <td>
                         <a href="#" onclick="openDeleteCreditCardModal({{ creditcard.id }}, '{{ creditcard.name }}')">Delete</a>
