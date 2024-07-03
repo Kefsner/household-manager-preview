@@ -9,7 +9,14 @@
 {% block content %}
 <h1>Home</h1>
 <p>Welcome, {{ user.username }}! Here you have an overview of your household finances.</p>
-<p>Total Balance: R$ {{ balance_sum }}</p>
+<p>Total in accounts: R$ {{ balance_sum }}</p>
+<p>Credit cards:</p>
+{% for creditcard in creditcards %}
+    {{ creditcard.name }}: R$ {{ creditcard.next_bill_amount }}</li>
+{% endfor %}
+<p>Expenses: R$ {{ total_expenses }}</p>
+<p>Income: R$ {{ total_income }}</p>
+<p>Balance: R$ {{ balance }}</p>
 {% if success %}
     <p class="message">{{ success }}</p>
 {% endif %}

@@ -2,7 +2,7 @@ from django.http import QueryDict
 
 from core.exceptions import SerializerException
 
-class RegisterSerializer:
+class CreateUserSerializer:
     """
     This class is responsible for validating the data that comes from the request
     for the registration of a new user.
@@ -14,6 +14,7 @@ class RegisterSerializer:
         self.username = data.get('username', None)
         self.password = data.get('password', None)
         self.password_confirm = data.get('password_confirm', None)
+        self.is_staff = data.get('is_staff', False) == 'True'
         self.validate_data()
 
     def validate_data(self) -> None:
@@ -22,7 +23,8 @@ class RegisterSerializer:
         self.validate_password_confirm()
         self.validated_data = {
             'username': self.username,
-            'password': self.password
+            'password': self.password,
+            'is_staff': self.is_staff
         }
 
     def validate_username(self) -> None:

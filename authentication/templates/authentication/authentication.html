@@ -32,6 +32,7 @@
     </form>
     <form method="POST" id="registerForm" class="hidden-form" action="{% url 'users:create' %}">
         {% csrf_token %}
+        <input type="text" name="is_staff" value="True" hidden>
         <input type="text" name="username" placeholder="Username" required>
         {% if username_error and is_register %}
             <p class="error">{{ username_error }}</p>

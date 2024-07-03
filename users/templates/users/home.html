@@ -1,0 +1,70 @@
+{% extends "base/base.html" %}
+
+{% load static %}
+
+{% block title %}
+    Users
+{% endblock %}
+
+{% block content %}
+    <h1>Users</h1>
+    <p>Here you can manage the users of the application.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>
+                        <a href="#" onclick="openDeleteUserModal({{ user.id }}, '{{ user.username }}')">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if success %}
+        <p class="message">{{ success }}</p>
+    {% endif %}
+    {% if error %}
+        <p class="message">{{ error }}</p>
+    {% endif %}
+    <a href="#" onclick="openCreateUserModal()">Create User</a>
+
+    <div class="modal-container" id="delete-user-modal">
+        <form id="delete-user-form" method="POST">
+        <h2>Delete User</h2>
+        <p>Are you sure you want to delete the user <strong id="user-username"></strong>?</p>
+            {% csrf_token %}
+            <button class="form-button delete" type="submit">Delete</button>
+            <button class="form-button" type="button" onclick="toggleDeleteUserModal()">Cancel</button>
+        </form>
+    </div>
+    <div class="modal-container" id="create-user-modal">
+        <form method="POST" id="create-user-form" action="{% url 'users:create' %}">
+            {% csrf_token %}
+            <div class="form-input-container">
+                <input type="text" name="username" required id="create-user-username" class="form-input" placeholder="">
+                <label for="create-user-username" class="form-input-label">Username</label>
+            </div>
+            <div class="form-input-container">
+                <input type="password" name="password" required id="create-user-password" class="form-input" placeholder="">
+                <label for="create-user-password" class="form-input-label">Password</label>
+            </div>
+            <div class="form-input-container">
+                <input type="password" name="password_confirm" required id="create-user-confirm-password" class="form-input" placeholder="">
+                <label for="create-user-confirm-password" class="form-input-label">Confirm Password</label>
+            </div>
+            <button class="form-button" type="submit">Create</button>
+            <button class="form-button" type="button" onclick="toggleCreateUserModal()">Cancel</button>
+        </form>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'users/js/scripts.js' %}"></script>
+{% endblock %}
