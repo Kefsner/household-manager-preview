@@ -10,7 +10,7 @@ from accounts.models import Account, Transaction
 
 class BaseView(LoginRequiredMixin, View):
     def get(self, request):
-        accounts = Account.objects.filter(user=request.user)
+        accounts = Account.objects.filter(db=request.user.db)
         balance_sum = accounts.aggregate(Sum('balance'))['balance__sum'] or Decimal('0')
 
         today = now().date()
@@ -30,6 +30,6 @@ class BaseView(LoginRequiredMixin, View):
             'balance_sum': balance_sum,
             'total_expenses': abs(total_expenses),
             'total_income': total_income,
-            'balance': total_income - total_expenses,
+            'balance': total_income + total_expenses,
         }
         return render(request, 'base/home.html', context)

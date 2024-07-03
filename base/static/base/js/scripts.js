@@ -21,3 +21,5 @@ function toggleOpenModelButton() {
         circleButton.classList.remove('active');
     }
 }
+
+// TODO: Add a function for updating the subcategory dropdown based on the selected category

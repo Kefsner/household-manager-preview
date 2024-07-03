@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Sum, Min
+from django.db.models import Sum
 
 from core.models import MetaData
 
@@ -36,6 +36,9 @@ class CreditCard(MetaData):
         if today > due:
             due += relativedelta(months=1)
         return self.adjust_for_holidays_and_weekends(due)
+    
+    #TODO: Rework these methods so the next_bill_amount is calculated with a month offset,
+    #      hence we can display any month's bill amount
     
     @property
     def next_bill_amount(self):
