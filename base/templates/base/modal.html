@@ -19,7 +19,7 @@
             {% endif %}
         </div>
         <div class="form-select-container">
-            <select id="income-category" name="category" required class="form-select">
+            <select id="income-category" name="category" required class="form-select category-dropdown">
                 <option value="" hidden selected>Category</option>   
                 {% for category in categories %}
                     {% if category.type == 'income' %}
@@ -33,7 +33,7 @@
             {% endif %}
         </div>
         <div class="form-select-container">
-            <select name="subcategory" class="form-select" id="income-subcategory">
+            <select name="subcategory" class="form-select subcategory-dropdown" id="income-subcategory">
                 <option value="" hidden selected>Subcategory</option>
                 {% for subcategory in subcategories %}
                     {% if subcategory.category.type == 'income' %}
@@ -86,7 +86,7 @@
             <label for="expense-amount" class="form-input-label">Amount</label>
         </div>
         <div class="form-select-container">
-            <select name="category" required class="form-select" id="expense-category">
+            <select name="category" required class="form-select category-dropdown" id="expense-category">
                 <option value="" hidden selected>Category</option>
                 {% for category in categories %}
                     {% if category.type == 'expense' %}
@@ -97,7 +97,7 @@
             <label for="expense-category" class="form-select-label">Category</label>
         </div>
         <div class="form-select-container">
-            <select name="subcategory" class="form-select" id="expense-subcategory">
+            <select name="subcategory" class="form-select subcategory-dropdown" id="expense-subcategory">
                 <option value="" hidden selected>Subcategory</option>
                 {% for subcategory in subcategories %}
                     {% if subcategory.category.type == 'expense' %}
@@ -180,7 +180,7 @@
             {% endif %}
         </div>
         <div class="form-select-container">
-            <select name="category" required class="form-select" id="credit-card-category">
+            <select name="category" required class="form-select category-dropdown" id="credit-card-category">
                 <option value="" hidden selected>Category</option>
                 {% for category in categories %}
                     {% if category.type == 'expense' %}
@@ -194,7 +194,7 @@
             {% endif %}
         </div>
         <div class="form-select-container">
-            <select name="subcategory" class="form-select" id="credit-card-subcategory">
+            <select name="subcategory" class="form-select subcategory-dropdown" id="credit-card-subcategory">
                 <option value="" hidden selected>Subcategory</option>
                 {% for subcategory in subcategories %}
                     {% if subcategory.category.type == 'expense' %}

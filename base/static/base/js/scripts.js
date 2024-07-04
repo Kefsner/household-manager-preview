@@ -22,4 +22,33 @@ function toggleOpenModelButton() {
     }
 }
 
-// TODO: Add a function for updating the subcategory dropdown based on the selected category
+
+// ===== Auto update subcategories based on the selected category =====
+document.addEventListener('DOMContentLoaded', function () {
+    const categoryDropdowns = document.querySelectorAll('.category-dropdown');
+    const subcategoryDropdowns = document.querySelectorAll('.subcategory-dropdown');
+
+    subcategoryDropdowns.forEach((subcategoryDropdown) => {
+        const subcategoryOptions = subcategoryDropdown.options;
+        Array.from(subcategoryOptions).forEach((option) => {
+            option.hidden = true;
+        });
+    });
+
+    categoryDropdowns.forEach((categoryDropdown, index) => {
+        categoryDropdown.addEventListener('change', function () {
+            const selectedCategoryId = categoryDropdown.value;
+            const subcategoryDropdown = subcategoryDropdowns[index];
+            const subcategoryOptions = subcategoryDropdown.options;
+            Array.from(subcategoryOptions).forEach((option) => {
+                if (option.classList.contains(`category-${selectedCategoryId}`)) {
+                    option.hidden = false;
+                } else {
+                    option.hidden = true;
+                }
+            });
+
+            subcategoryDropdown.value = '';
+        });
+    });
+});

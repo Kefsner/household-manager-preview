@@ -1,0 +1,30 @@
+{% load static %}
+
+<div class="charts-container">
+    <div class="chart-container">
+        <canvas class="home-chart" id="income-chart"></canvas>
+        <script type="application/json" id="income-data">
+            {{ income_data_json }}
+        </script>
+    </div>
+    
+    <div class="chart-container">
+        <canvas class="home-chart" id="balance-chart"></canvas>
+        <div
+            id="balance-data"
+            data-income="{{ total_income }}"
+            data-expense="{{ total_expenses }}"
+        >
+        </div>
+    </div>
+    
+    <div class="chart-container">
+        <canvas class="home-chart" id="expense-chart"></canvas>
+        <script type="application/json" id="expense-data">
+            {{ expense_data_json }}
+        </script>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'base/js/chart.js' %}"></script>
