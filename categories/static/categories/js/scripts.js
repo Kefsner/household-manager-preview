@@ -67,3 +67,19 @@ function toggleSubcategories(categoryId) {
     const subcategories = document.getElementById(categoryId);
     subcategories.classList.toggle('show');
 }
+
+// ===== Expand All Subcategories tables =====
+function expandAllSubcategories() {
+    const subcategories = document.querySelectorAll('.subcategory-table');
+    subcategories.forEach((subcategory) => {
+        subcategory.classList.add('show');
+    });
+}
+
+// ===== Collapse All Subcategories tables =====
+function collapseAllSubcategories() {
+    const subcategories = document.querySelectorAll('.subcategory-table');
+    subcategories.forEach((subcategory) => {
+        subcategory.classList.remove('show');
+    });
+}

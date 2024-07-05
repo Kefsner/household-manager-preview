@@ -1,11 +1,19 @@
-<button id="circle-button" onclick="toggleOpenModelButton()">+</button>
+{% if accounts and categories %}
+    <button id="circle-button" onclick="toggleOpenModelButton()">+</button>
+{% endif %}
 
 <div id="transaction-modal">
     <a class="open-modal-button" href="#" onclick="openTransactionModal('income')">Income</a>
     <a class="open-modal-button" href="#" onclick="openTransactionModal('expense')">Expense</a>
-    <a class="open-modal-button" href="#" onclick="openTransactionModal('transfer')">Transfer</a>
-    <a class="open-modal-button" href="#" onclick="openTransactionModal('credit-card')">Credit</a>
+    {% if accounts|length > 1 %}
+        <a class="open-modal-button" href="#" onclick="openTransactionModal('transfer')">Transfer</a>
+    {% endif %}
+    {% if creditcards %}
+        <a class="open-modal-button" href="#" onclick="openTransactionModal('credit-card')">Credit</a>
+    {% endif %}
 </div>
+
+<div id="form-errors">{{ form_error }}</div>
 
 <div id="income-form-container" class="modal-container">
     <form id="form-create-income" method="POST" action="{% url 'accounts:create_transaction' %}">

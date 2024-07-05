@@ -13,12 +13,14 @@ def context(request):
         accounts = Account.objects.filter(db=request.user.db)
         creditcards = CreditCard.objects.filter(db=request.user.db)
         today = datetime.now().date().strftime('%Y-%m-%d')
+        form_errors = request.session.get('form_errors')
         context = {
             'categories': categories,
             'subcategories': subcategories,
             'accounts': accounts,
             'creditcards': creditcards,
             'today': today,
+            'form_errors': form_errors
         }
         messages = list(msgs.get_messages(request))
         if messages and messages[-1].message == 'register':

@@ -8,7 +8,26 @@
 
 {% block content %}
 
-{% include "base/charts.html" %}
+{% if not accounts or not categories %}
+    <div class="welcome-container">
+        <h2 class="welcome-title">Welcome to Household Manager!</h2>
+        {% if not accounts and not categories %}
+            <p class="welcome-message">In order to start, you need to create at least one account and one category.</p>
+        {% elif not accounts %}
+            <p class="welcome-message">In order to start, you need to create at least one account.</p>
+        {% elif not categories %}
+            <p class="welcome-message">In order to start, you need to create at least one category.</p>
+        {% endif %}
+        {% if not accounts %}
+            <p class="welcome-message">Click <a class="main-anchor-tag" href="{% url 'accounts:home' %}">here</a> for access the accounts page.</p>
+        {% endif %}
+        {% if not categories %}
+            <p class="welcome-message">Click <a class="main-anchor-tag" href="{% url 'categories:home' %}">here</a> for access the categories page.</p>
+        {% endif %}
+    </div>
+{% else %}
+    {% include "base/charts.html" %}
+{% endif %}
 
 {% if success %}
     <p class="message">{{ success }}</p>

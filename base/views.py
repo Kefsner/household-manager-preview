@@ -27,7 +27,6 @@ class BaseView(LoginRequiredMixin, View):
             'labels': [exp['category__name'] for exp in expenses_by_category],
             'data': [float(abs(exp['total'])) for exp in expenses_by_category],
         }
-
         total_expenses = sum(expense_data['data'])
 
         # Similarly, aggregate incomes by category
@@ -42,7 +41,6 @@ class BaseView(LoginRequiredMixin, View):
             'labels': [inc['category__name'] for inc in incomes_by_category],
             'data': [float(inc['total']) for inc in incomes_by_category],
         }
-
         total_income = sum(income_data['data'])
 
         context = {
@@ -51,5 +49,4 @@ class BaseView(LoginRequiredMixin, View):
             'total_income': total_income,
             'total_expenses': total_expenses,
         }
-
         return render(request, 'base/home.html', context)

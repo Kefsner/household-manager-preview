@@ -11,63 +11,67 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Categories</h1>
-    <p>Here you can manage your categories.</p>
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Subcategories</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for category in categories %}
+    <a class="main-anchor-tag" href="#" onclick="openCreateCategoryModal(); return false;">Create Category</a>
+    <a class="main-anchor-tag" href="#" onclick="openCreateDefaultCategoriesModal(); return false;">Create Default Categories</a>
+    <div class="subcategories-actions">
+        <a class="main-anchor-tag" href="#" onclick="expandAllSubcategories(); return false;">Expand All Subcategories</a>
+        <a class="main-anchor-tag" href="#" onclick="collapseAllSubcategories(); return false;">Collapse All Subcategories</a>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
                 <tr>
-                    <td>{{ category.name }}</td>
-                    <td>{{ category.get_type_display }}</td>
-                    <td>
-                        <a href="#" onclick="toggleSubcategories('subcategory-table-{{ category.id }}')">Toggle Subcategories</a>
-                        <table id="subcategory-table-{{ category.id }}" class="subcategory-table">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Description</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for subcategory in category.subcategory_set.all %}
-                                    <tr>
-                                        <td>{{ subcategory.name }}</td>
-                                        <td>{{ subcategory.description }}</td>
-                                        <td>
-                                            <a href='#' onclick="openDeleteSubcategoryModal({{ subcategory.id }}, '{{ subcategory.name }}')">Delete</a>
-                                        </td>
-                                    </tr>
-                                {% empty %}
-                                    <tr><td>No subcategories</td></tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </td>
-                    <td>
-                        <a href="#" onclick="openAddSubcategoryModal({{ category.id }}, '{{ category.name }}')">Add Subcategory</a>
-                        <a href='#' onclick="openDeleteCategoryModal({{ category.id }}, '{{ category.name }}')">Delete</a>
-                    </td>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Subcategories</th>
+                    <th>Actions</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for category in categories %}
+                    <tr>
+                        <td>{{ category.name }}</td>
+                        <td>{{ category.get_type_display }}</td>
+                        <td>
+                            <a href="#" onclick="toggleSubcategories('subcategory-table-{{ category.id }}'); return false;">Toggle Subcategories</a>
+                            <table id="subcategory-table-{{ category.id }}" class="subcategory-table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for subcategory in category.subcategory_set.all %}
+                                        <tr>
+                                            <td>{{ subcategory.name }}</td>
+                                            <td>{{ subcategory.description }}</td>
+                                            <td>
+                                                <a href='#' onclick="openDeleteSubcategoryModal({{ subcategory.id }}, '{{ subcategory.name }}'); return false;">Delete</a>
+                                            </td>
+                                        </tr>
+                                    {% empty %}
+                                        <tr><td>No subcategories</td></tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </td>
+                        <td>
+                            <a href="#" onclick="openAddSubcategoryModal({{ category.id }}, '{{ category.name }}'); return false;">Add Subcategory</a>
+                            <a href='#' onclick="openDeleteCategoryModal({{ category.id }}, '{{ category.name }}'); return false;">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     {% if success %}
         <p class="message">{{ success }}</p>
     {% endif %}
     {% if error %}
         <p class="message">{{ error }}</p>
     {% endif %}
-    <a href="#" onclick="openCreateCategoryModal()">Create Category</a>
-    <a href="#" onclick="openCreateDefaultCategoriesModal()">Create Default Categories</a>
 
     <div class="modal-container" id="delete-category-modal">
         <form id="delete-category-form" method="POST">

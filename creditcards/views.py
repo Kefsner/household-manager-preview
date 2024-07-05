@@ -18,7 +18,7 @@ import traceback
 class CreditCardView(LoginRequiredMixin, View):
     def get(self, request):
         try:
-            return render(request, 'creditcard/home.html')
+            return render(request, 'creditcards/home.html')
         except Exception as e:
             logger = Logger()
             logger.log(

@@ -7,37 +7,37 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Accounts</h1>
-    <p>Here you can manage your bank accounts.</p>
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Owner</th>
-                <th>Balance</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for account in accounts %}
+    <a class="main-anchor-tag"  href="#" onclick="openCreateAccountModal()">Create Account</a>
+    <div class="table-container">
+        <table>
+            <thead>
                 <tr>
-                    <td>{{ account.name }}</td>
-                    <td>{{ account.user.username }}</td>
-                    <td>R$ {{ account.balance }}</td>
-                    <td>
-                        <a href="#" onclick="openDeleteAccountModal({{ account.id }}, '{{ account.name }}')">Delete</a>
-                    </td>
+                    <th>Name</th>
+                    <th>Owner</th>
+                    <th>Balance</th>
+                    <th>Actions</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for account in accounts %}
+                    <tr>
+                        <td>{{ account.name }}</td>
+                        <td>{{ account.user.username }}</td>
+                        <td>R$ {{ account.balance }}</td>
+                        <td>
+                            <a href="#" onclick="openDeleteAccountModal({{ account.id }}, '{{ account.name }}')">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     {% if success %}
         <p class="message">{{ success }}</p>
     {% endif %}
     {% if error %}
         <p class="message">{{ error }}</p>
     {% endif %}
-    <a href="#" onclick="openCreateAccountModal()">Create Account</a>
 
     <div class="modal-container" id="delete-account-modal">
         <form id="delete-account-form" method="POST">
@@ -65,8 +65,8 @@
                 <label for="create-account-name" class="form-input-label">Account Name</label>
             </div>
             <div class="form-input-container">
-                <input type="number" name="initial_balance" placeholder="" required class="form-input" step="0.01">
-                <label for="initial_balance" class="form-input-label">Initial Balance</label>
+                <input type="number" name="initial_balance" placeholder="" required class="form-input" step="0.01" id="create-account-initial-balance">
+                <label for="create-account-initial-balance" class="form-input-label">Initial Balance</label>
             </div>
             <button class="form-button" type="submit">Create Account</button>
             <button class="form-button" type="button" onclick="toggleCreateAccountModal()">Cancel</button>

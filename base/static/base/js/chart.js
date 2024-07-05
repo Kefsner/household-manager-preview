@@ -21,7 +21,12 @@ const incomePlugin = {
 
         const centerX = (chart.chartArea.left + chart.chartArea.right) / 2;
         const centerY = (chart.chartArea.top + chart.chartArea.bottom) / 2;
-        ctx.fillText(`R$ ${sum}`, centerX, centerY);
+        ctx.fillText(`R$ ${sum.toFixed(2)}`, centerX, centerY);
+
+        ctx.font = '12px Arial'
+        ctx.fillStyle = 'black';
+        ctx.fillText('Income', centerX, centerY + 15);
+
         ctx.restore();
     }
 };
@@ -63,7 +68,7 @@ const incomeChart = new Chart(incomeCtx, {
                 displayColors: false
             },
         },
-        cutout: '70%',
+        cutout: '60%',
     },
     plugins: [incomePlugin],
 });
@@ -90,7 +95,12 @@ const expensePlugin = {
 
         const centerX = (chart.chartArea.left + chart.chartArea.right) / 2;
         const centerY = (chart.chartArea.top + chart.chartArea.bottom) / 2;
-        ctx.fillText(`R$ ${sum}`, centerX, centerY);
+        ctx.fillText(`R$ ${sum.toFixed(2)}`, centerX, centerY);
+
+        ctx.font = '12px Arial'
+        ctx.fillStyle = 'black';
+        ctx.fillText('Expenses', centerX, centerY + 15);
+
         ctx.restore();
     }
 };
@@ -131,7 +141,7 @@ const expenseChart = new Chart(expenseCtx, {
                 displayColors: false
             },
         },
-        cutout: '70%',
+        cutout: '60%',
     },
     plugins: [expensePlugin],
 });
@@ -151,7 +161,7 @@ const balanceData = {
 const balancePlugin = {
     id: 'centerText',
     afterDraw: function(chart) {
-        const sum = (totalIncome - totalExpense).toFixed(2);
+        const sum = totalIncome - totalExpense;
 
         const ctx = chart.ctx;
         ctx.save();
@@ -162,7 +172,12 @@ const balancePlugin = {
 
         const centerX = (chart.chartArea.left + chart.chartArea.right) / 2;
         const centerY = (chart.chartArea.top + chart.chartArea.bottom) / 2;
-        ctx.fillText(`R$ ${sum}`, centerX, centerY);
+        ctx.fillText(`R$ ${sum.toFixed(2)}`, centerX, centerY);
+
+        ctx.font = '12px Arial'
+        ctx.fillStyle = 'black';
+        ctx.fillText('Balance', centerX, centerY + 15);
+
         ctx.restore();
     }
 };
@@ -187,8 +202,18 @@ const balanceChart = new Chart(balanceCtx, {
             legend: {
                 display: false,
             },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        amount = parseFloat(context.raw)
+                        return `R$ ${amount.toFixed(2)}`;
+                    },
+                },
+                position: 'nearest',
+                displayColors: false
+            },
         },
-        cutout: '70%',
+        cutout: '60%',
     },
     plugins: [balancePlugin],
 });

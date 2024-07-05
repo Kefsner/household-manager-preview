@@ -13,6 +13,7 @@ from accounts.services import AccountServices
 from accounts.models import Account
 
 from core.exceptions import SerializerException
+from core.utils import next_page
 from core.logger import Logger
 
 import traceback
@@ -76,7 +77,7 @@ class DeleteAccountView(LoginRequiredMixin, View):
                 traceback=traceback.format_exc()
             )
             return render(request, 'core/error.html')
-        
+
 class CreateTransactionView(LoginRequiredMixin, View):    
     def post(self, request):
         try:
@@ -84,11 +85,12 @@ class CreateTransactionView(LoginRequiredMixin, View):
             data = serializer.validated_data
             services = AccountServices(data)
             msgs.success(request, services.create_transaction(request))
-            return redirect('base:home')
+            return redirect(next_page(request))
         except SerializerException as e:
             for field, error in e.errors.items():
                 msgs.error(request, error, extra_tags=field)
-            return redirect('base:home')
+            request.session['form_error'] = 'transaction'
+            return redirect(next_page(request))
         except Exception as e:
             logger = Logger()
             logger.log(
