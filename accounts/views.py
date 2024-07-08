@@ -36,14 +36,18 @@ class AccountsView(LoginRequiredMixin, View):
 class CreateAccountView(LoginRequiredMixin, View):    
     def post(self, request):
         try:
-            serializer = CreateAccountSerializer(data=request.POST)
+            serializer = CreateAccountSerializer(
+                data=request.POST,
+                db=request.user.db
+            )
             data = serializer.validated_data
             services = AccountServices(data)
             msgs.success(request, services.create_account(request))
             return redirect('accounts:home')
         except SerializerException as e:
             for field, error in e.errors.items():
-                msgs.error(request, error, extra_tags=field)
+                extra_tags = 'page ' + field
+                msgs.error(request, error, extra_tags=extra_tags)
             return redirect('accounts:home')
         except IntegrityError:
             msgs.error(
@@ -81,15 +85,19 @@ class DeleteAccountView(LoginRequiredMixin, View):
 class CreateTransactionView(LoginRequiredMixin, View):    
     def post(self, request):
         try:
-            serializer = CreateTransactionSerializer(data=request.POST)
+            serializer = CreateTransactionSerializer(
+                data=request.POST,
+                db=request.user.db
+            )
             data = serializer.validated_data
             services = AccountServices(data)
             msgs.success(request, services.create_transaction(request))
             return redirect(next_page(request))
         except SerializerException as e:
             for field, error in e.errors.items():
-                msgs.error(request, error, extra_tags=field)
-            request.session['form_error'] = 'transaction'
+                form_type = request.POST.get('type') # 'expense' or 'income'
+                extra_tags = form_type + ' ' + field if form_type else field
+                msgs.error(request, error, extra_tags=extra_tags)
             return redirect(next_page(request))
         except Exception as e:
             logger = Logger()
@@ -104,18 +112,21 @@ class CreateTransactionView(LoginRequiredMixin, View):
 class CreateTransferView(LoginRequiredMixin, View):    
     def post(self, request):
         try:
-            serializer = CreateTransferSerializer(data=request.POST)
+            serializer = CreateTransferSerializer(
+                data=request.POST,
+                db=request.user.db
+            )
             data = serializer.validated_data
             services = AccountServices(data)
             msgs.success(request, services.create_transfer(request))
-            return redirect('base:home')
+            return redirect(next_page(request))
         except SerializerException as e:
             for field, error in e.errors.items():
                 msgs.error(request, error, extra_tags=field)
-            return redirect('base:home')
+            return redirect(next_page(request))
         except InsufficientFundsException as e:
             msgs.error(request, str(e))
-            return redirect('base:home')
+            return redirect(next_page(request))
         except Exception as e:
             logger = Logger()
             logger.log(

@@ -1,4 +1,3 @@
-from base.views import BaseView
 from django.http import HttpRequest
 
 def next_page(request: HttpRequest) -> tuple[str, dict]:

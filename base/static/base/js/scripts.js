@@ -90,12 +90,22 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// ===== Auto open form if form_erros is present =====
+// ===== Auto open form modal if there is an error =====
+// This script is for the transactions modal (from the circle button)
+// For page specific forms, the script is in the corresponding app's static/js/scripts.js file
 document.addEventListener('DOMContentLoaded', function () {
-    const formErrors = document.getElementById('form-errors');
-    if (formErrors.innerHTML !== '') {
-        console.log('Form errors found');
-        const type = formErrors.getAttribute('formType');
-        toggleTransactionModal(type);
+    const message = document.querySelector('.message-content');
+    const tags = document.querySelector('.message-tags');
+    if (message && tags) {
+        const [form, field] = tags.innerHTML.split(' ');
+        if (form === 'page') {
+            return;
+        }
+        const span = document.getElementById(`${form}-${field}-error`);
+        span.hidden = false;
+        toggleTransactionModal(form);
+        span.innerHTML = message.innerHTML;
+        const input = span.closest('.form-element-container').querySelector('input, select');
+        input.classList.add('error');
     }
 });

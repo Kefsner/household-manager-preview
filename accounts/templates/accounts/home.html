@@ -32,13 +32,6 @@
             </tbody>
         </table>
     </div>
-    {% if success %}
-        <p class="message">{{ success }}</p>
-    {% endif %}
-    {% if error %}
-        <p class="message">{{ error }}</p>
-    {% endif %}
-
     <div class="modal-container" id="delete-account-modal">
         <form id="delete-account-form" method="POST">
         <h2>Delete Account</h2>
@@ -51,7 +44,7 @@
     <div class="modal-container" id="create-account-modal">
         <form method="POST" id="create-account-form" action="{% url 'accounts:create' %}">
             {% csrf_token %}
-            <div class="form-select-container">
+            <div class="form-select-container form-element-container">
                 <select required name="user" id="create-account-user" class="form-select">
                     <option value="" hidden selected>Account Owner</option>
                     {% for user in users %}
@@ -59,14 +52,17 @@
                     {% endfor %}
                 </select>
                 <label for="create-account-user" class="form-select-label">Account Owner</label>
+                <span class="form-element-error" id="create-account-user-error" hidden></span>
             </div>
-            <div class="form-input-container">
+            <div class="form-input-container form-element-container">
                 <input type="text" name="name" placeholder="" required class="form-input" id="create-account-name">
                 <label for="create-account-name" class="form-input-label">Account Name</label>
+                <span class="form-element-error" id="create-account-name-error" hidden></span>
             </div>
-            <div class="form-input-container">
+            <div class="form-input-container form-element-container">
                 <input type="number" name="initial_balance" placeholder="" required class="form-input" step="0.01" id="create-account-initial-balance">
                 <label for="create-account-initial-balance" class="form-input-label">Initial Balance</label>
+                <span class="form-element-error" id="create-account-initial_balance-error" hidden></span>
             </div>
             <button class="form-button" type="submit">Create Account</button>
             <button class="form-button" type="button" onclick="toggleCreateAccountModal()">Cancel</button>
