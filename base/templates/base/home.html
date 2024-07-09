@@ -27,13 +27,41 @@
     </div>
 {% else %}
     {% include "base/charts.html" %}
-{% endif %}
-
-{% if success %}
-    <p class="message">{{ success }}</p>
-{% endif %}
-{% if error %}
-    <p class="message">{{ error }}</p>
+    <div class="cards-container">
+        <div class="card">
+            <h3>R$ {{ total_in_accounts }}</h3>
+            <p>Total in Accounts</p>
+        </div>
+        {% if creditcards %}
+            <div class="card">
+                <h3>R$ {{ total_next_credit_card_bill }}</h3>
+                <p>Next Credit Card Bill</p>
+            </div>
+        {% endif %}
+    </div>
+    <div class="table-container">
+        <h2>Recent Transactions</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Amount</th>
+                    <th>Category</th>
+                    <th>Account</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                    <tr>
+                        <td>R$ {{ transaction.amount }}</td>
+                        <td>{{ transaction.category.name }}</td>
+                        <td>{{ transaction.account.name }}</td>
+                        <td>{{ transaction.date }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endif %}
 {% endblock %}
 

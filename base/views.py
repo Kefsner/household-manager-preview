@@ -5,7 +5,8 @@ from django.shortcuts import render
 from django.db.models import Sum
 from django.views import View
 
-from accounts.models import Transaction
+from accounts.models import Transaction, Account
+from creditcards.models import CreditCard
 
 import json
 
@@ -49,4 +50,18 @@ class BaseView(LoginRequiredMixin, View):
             'total_income': total_income,
             'total_expenses': total_expenses,
         }
+
+        # Last 5 transactions
+        transactions = Transaction.objects.filter(db=request.user.db).order_by('-date')[:5]
+        context['transactions'] = transactions
+
+        # Total in accounts
+        accounts = Account.objects.filter(db=request.user.db)
+        total = sum([account.balance for account in accounts])
+        context['total_in_accounts'] = total
+
+        # Total next credit card bill
+        creditcards = CreditCard.objects.filter(db=request.user.db)
+        total = sum([creditcard.next_bill_amount for creditcard in creditcards])
+        context['total_next_credit_card_bill'] = total
         return render(request, 'base/home.html', context)
