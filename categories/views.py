@@ -4,7 +4,7 @@ from django.contrib import messages as msgs
 from django.db import IntegrityError
 from django.views import View
 
-from categories.serializers import CreateCategorySerializer, AddSubcategorySerializer
+from categories.serializers import CreateCategorySerializer, CreateSubcategorySerializer
 from categories.services import CategoryServices, DefaultCategoriesServices
 from categories.models import Category, Subcategory
 
@@ -29,14 +29,18 @@ class CategoriesView(LoginRequiredMixin, View):
 class CreateCategoryView(LoginRequiredMixin, View):    
     def post(self, request):
         try:
-            serializer = CreateCategorySerializer(data=request.POST)
+            serializer = CreateCategorySerializer(
+                data=request.POST,
+                db=request.user.db
+            )
             data = serializer.validated_data
             services = CategoryServices(data)
             msgs.success(request, services.create_category(request))
             return redirect('categories:home')
         except SerializerException as e:
             for field, error in e.errors.items():
-                msgs.error(request, error, extra_tags=field)
+                extra_tags = 'page ' + field
+                msgs.error(request, error, extra_tags=extra_tags)
             return redirect('categories:home')
         except IntegrityError:
             msgs.error(request, 'Category already exists.')
@@ -68,18 +72,19 @@ class DeleteCategoryView(LoginRequiredMixin, View):
             )
             return render(request, 'core/error.html')
         
-class AddSubcategoryView(LoginRequiredMixin, View):
+class CreateSubcategoryView(LoginRequiredMixin, View):
     def post(self, request, pk):
         try:
             category = Category.objects.get(pk=pk)
-            serializer = AddSubcategorySerializer(data=request.POST)
+            serializer = CreateSubcategorySerializer(data=request.POST)
             data = serializer.validated_data
             services = CategoryServices(data)
-            msgs.success(request, services.add_subcategory(request, category))
+            msgs.success(request, services.create_subcategory(request, category))
             return redirect('categories:home')
         except SerializerException as e:
             for field, error in e.errors.items():
-                msgs.error(request, error, extra_tags=field)
+                extra_tags = 'page ' + field + '_' + str(pk) + '-' + category.name + '_subcategory'
+                msgs.error(request, error, extra_tags=extra_tags)
             return redirect('categories:home')
         except IntegrityError as e:
             msgs.error(request, 'Subcategory already exists in this category.')

@@ -79,9 +79,8 @@ class CreditCardServices:
                 installment.save(request)
         return 'Transaction created successfully.'
     
-    def pay_credit_card(self, request: HttpRequest) -> str:
+    def pay_credit_card(self, request: HttpRequest, credit_card: CreditCard) -> str:
         with transaction.atomic():
-            credit_card = CreditCard.objects.get(id=self.data['credit_card'])
             # Pay only if is closed. That is, today is between the closing date and the due date.
             if not (
                 (credit_card.next_due_date - relativedelta(days=7) <= datetime.date.today()) and

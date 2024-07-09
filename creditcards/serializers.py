@@ -5,7 +5,8 @@ from datetime import datetime
 from decimal import Decimal
 
 class CreateCreditCardSerializer:
-    def __init__(self, data: QueryDict) -> None:
+    def __init__(self, data: QueryDict, db: str) -> None:
+        self.db = db
         self.name = data.get('name', None)
         self.account = data.get('account', None)
         self.due_day = data.get('due_day', None)
@@ -26,32 +27,33 @@ class CreateCreditCardSerializer:
 
     def validate_name(self) -> None:
         if not self.name:
-            raise SerializerException({'name_error': 'The field is required'})
+            raise SerializerException({'name': 'The field is required'})
         
     def validate_account(self) -> None:
         if not self.account:
-            raise SerializerException({'account_error': 'The field is required'})
+            raise SerializerException({'account': 'The field is required'})
         
     def validate_due_day(self) -> None:
         if not self.due_day:
-            raise SerializerException({'due_day_error': 'The field is required'})
+            raise SerializerException({'due_day': 'The field is required'})
         try:
             self.due_day = int(self.due_day)
         except:
-            raise SerializerException({'due_day_error': 'The field must be an integer'})
+            raise SerializerException({'due_day': 'The field must be an integer'})
         if self.due_day < 1 or self.due_day > 31:
-            raise SerializerException({'due_day_error': 'The field must be a number between 1 and 31'})
+            raise SerializerException({'due_day': 'The field must be a number between 1 and 31'})
         
     def validate_limit(self) -> None:
         if not self.limit:
-            raise SerializerException({'limit_error': 'The field is required'})
+            raise SerializerException({'limit': 'The field is required'})
         try:
             self.limit = Decimal(self.limit)
         except:
-            raise SerializerException({'limit_error': 'The field must be a number'})
+            raise SerializerException({'limit': 'The field must be a number'})
         
 class CreateCreditCardTransactionSerializer:
-    def __init__(self, data: QueryDict) -> None:
+    def __init__(self, data: QueryDict, db: str) -> None:
+        self.db = db
         self.credit_card = data.get('credit_card', None)
         self.description = data.get('description', None)
         self.amount = data.get('amount', None)
@@ -81,55 +83,52 @@ class CreateCreditCardTransactionSerializer:
 
     def validate_credit_card(self) -> None:
         if not self.credit_card:
-            raise SerializerException({'credit_card_error': 'The field is required'})
+            raise SerializerException({'credit_card': 'The field is required'})
         
     def validate_description(self) -> None:
         if not self.description:
-            raise SerializerException({'description_error': 'The field is required'})
+            raise SerializerException({'description': 'The field is required'})
         
     def validate_amount(self) -> None:
         if not self.amount:
-            raise SerializerException({'amount_error': 'The field is required'})
+            raise SerializerException({'amount': 'The field is required'})
         try:
             self.amount = Decimal(self.amount)
         except:
-            raise SerializerException({'amount_error': 'The field must be a number'})
+            raise SerializerException({'amount': 'The field must be a number'})
         
     def validate_category(self) -> None:
         if not self.category:
-            raise SerializerException({'category_error': 'The field is required'})
+            raise SerializerException({'category': 'The field is required'})
         
     def validate_subcategory(self) -> None:
         if not self.subcategory:
-            raise SerializerException({'subcategory_error': 'The field is required'})
+            raise SerializerException({'subcategory': 'The field is required'})
         
     def validate_installments(self) -> None:
         if not self.installments:
-            raise SerializerException({'installments_error': 'The field is required'})
+            raise SerializerException({'installments': 'The field is required'})
         try:
             self.installments = int(self.installments)
         except:
-            raise SerializerException({'installments_error': 'The field must be an integer'})
+            raise SerializerException({'installments': 'The field must be an integer'})
         
     def validate_date(self) -> None:
         if not self.date:
-            raise SerializerException({'date_error': 'The field is required'})
+            raise SerializerException({'date': 'The field is required'})
         
         try:
             self.date = datetime.strptime(self.date, '%Y-%m-%d').date()
         except:
-            raise SerializerException({'date_error': 'The field must be a date in the format yyyy-mm-dd'})
+            raise SerializerException({'date': 'The field must be a date in the format yyyy-mm-dd'})
         
 class PayCreditCardSerializer:
     def __init__(self, data: QueryDict) -> None:
-        print(data)
-        self.credit_card = data.get('creditcard', None)
         self.amount = data.get('amount', None)
         self.account = data.get('account', None)
         self.validate_data()
 
     def validate_data(self) -> None:
-        self.validate_credit_card()
         self.validate_amount()
         self.validate_account()
         self.validated_data = {
@@ -137,19 +136,15 @@ class PayCreditCardSerializer:
             'amount': self.amount,
             'account': self.account
         }
-
-    def validate_credit_card(self) -> None:
-        if not self.credit_card:
-            raise SerializerException({'credit_card_error': 'The field is required'})
         
     def validate_amount(self) -> None:
         if not self.amount:
-            raise SerializerException({'amount_error': 'The field is required'})
+            raise SerializerException({'amount': 'The field is required'})
         try:
             self.amount = Decimal(self.amount)
         except:
-            raise SerializerException({'amount_error': 'The field must be a number'})
+            raise SerializerException({'amount': 'The field must be a number'})
         
     def validate_account(self) -> None:
         if not self.account:
-            raise SerializerException({'account_error': 'The field is required'})
+            raise SerializerException({'account': 'The field is required'})

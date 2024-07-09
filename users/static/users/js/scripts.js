@@ -11,7 +11,6 @@ function openDeleteUserModal(userId, userName) {
 }
 
 function toggleDeleteUserModal() {
-    console.log('toggleDeleteUserModal');
     const modal = document.getElementById('delete-user-modal');
     modal.classList.toggle('show');
 }
@@ -23,5 +22,38 @@ function openCreateUserModal() {
 
 function toggleCreateUserModal() {
     const modal = document.getElementById('create-user-modal');
+    if (modal.classList.contains('show')) {
+        const form = modal.querySelector('form');
+        form.reset();
+        const fields = form.querySelectorAll('input, select');
+        fields.forEach(input => {
+            input.classList.remove('error');
+        });
+        const spans = form.querySelectorAll('span');
+        spans.forEach(span => {
+            span.hidden = true;
+            span.innerHTML = '';
+        });
+    }
     modal.classList.toggle('show');
 }
+
+// ===== Auto open form modal if there is an error =====
+document.addEventListener('DOMContentLoaded', function () {
+    const message = document.querySelector('.message-content');
+    const tags = document.querySelector('.message-tags');
+    console.log('message:', message);
+    console.log('tags:', tags);
+    if (message && tags) {
+        const [form, field] = tags.innerHTML.split(' ');
+        if (form === 'page') {
+            const spanId = `create-user-${field}-error`;
+            const span = document.getElementById(spanId);
+            span.hidden = false;
+            span.innerHTML = message.innerHTML;
+            const input = span.closest('.form-element-container').querySelector('input, select');
+            input.classList.add('error');
+            openCreateUserModal();
+        }
+    }
+});

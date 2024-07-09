@@ -14,7 +14,8 @@ import traceback
 class UserView(View):
     def get(self, request):
         try:
-            context = self._get(request)
+            users = User.objects.filter(db=request.user.db)
+            context = { 'users': users }
             return render(request, 'users/home.html', context)
         except Exception as e:
             logger = Logger()
@@ -24,25 +25,24 @@ class UserView(View):
                 traceback=traceback.format_exc()
             )
             return render(request, 'core/error.html')
-        
-    @staticmethod
-    def _get(request):
-        users = User.objects.filter(db=request.user.db)
-        return { 'users': users }
 
 class CreateUserView(View):
     def post(self, request):
         try:
-            serializer = CreateUserSerializer(data=request.POST)
+            serializer = CreateUserSerializer(
+                data=request.POST,
+                db=request.user.db
+            )
             data = serializer.validated_data
             services = UserServices(data)
             msgs.success(request, services.create_user(request), extra_tags='success')
-            return redirect('authentication:login')
+            return redirect('users:home')
         except SerializerException as e:
             for field, error in e.errors.items():
-                msgs.error(request, error, extra_tags=field)
+                extra_tags = 'page ' + field
+                msgs.error(request, error, extra_tags=extra_tags)
             msgs.info(request, 'register')
-            return redirect('authentication:login')
+            return redirect('users:home')
         except Exception as e:
             logger = Logger()
             logger.log(

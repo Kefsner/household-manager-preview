@@ -21,6 +21,19 @@ function openCreateAccountModal() {
 
 function toggleCreateAccountModal() {
   const modal = document.getElementById('create-account-modal');
+  if (modal.classList.contains('show')) {
+    const form = modal.querySelector('form');
+    form.reset();
+    const fields = form.querySelectorAll('input, select');
+    fields.forEach(input => {
+      input.classList.remove('error');
+    });
+    const spans = form.querySelectorAll('span');
+    spans.forEach(span => {
+      span.hidden = true;
+      span.innerHTML = '';
+    });
+  }
   modal.classList.toggle('show');
 }
 

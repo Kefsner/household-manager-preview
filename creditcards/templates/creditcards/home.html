@@ -44,13 +44,6 @@
             </tbody>
         </table>
     </div>
-    {% if success %}
-        <p class="message">{{ success }}</p>
-    {% endif %}
-    {% if error %}
-        <p class="message">{{ error }}</p>
-    {% endif %}
-
     <div class="modal-container" id="delete-creditcard-modal">
         <form id="delete-creditcard-form" method="POST">
         <h2>Delete Credit Card</h2>
@@ -63,11 +56,12 @@
     <div class="modal-container" id="create-creditcard-modal">
         <form method="POST" id="create-creditcard-form" action="{% url 'creditcards:create' %}">
             {% csrf_token %}
-            <div class="form-input-container">
+            <div class="form-input-container form-element-container">
                 <input type="text" name="name" placeholder="" required class="form-input" id="create-creditcard-name">
                 <label for="create-creditcard-name" class="form-input-label">Credit Card Name</label>
+                <span class="form-element-error" id="create-creditcard-name-error" hidden></span>
             </div>
-            <div class="form-select-container">
+            <div class="form-select-container form-element-container">
                 <select name="account" required class="form-select" id="create-creditcard-account">
                     <option value="" hidden selected>Account</option>
                     {% for account in accounts %}
@@ -75,14 +69,17 @@
                     {% endfor %}
                 </select>
                 <label for="create-creditcard-account" class="form-select-label">Account</label>
+                <span class="form-element-error" id="create-creditcard-account-error" hidden></span>
             </div>
-            <div class="form-input-container">
+            <div class="form-input-container form-element-container">
                 <input type="number" name="due_day" placeholder="" required class="form-input" id="create-creditcard-due-day">
                 <label for="create-creditcard-due-day" class="form-input-label">Due Day</label>
+                <span class="form-element-error" id="create-creditcard-due_day-error" hidden></span>
             </div>
-            <div class="form-input-container">
+            <div class="form-input-container form-element-container">
                 <input type="number" name="limit" placeholder="" required class="form-input" id="create-creditcard-limit" step="0.01">
                 <label for="create-creditcard-limit" class="form-input-label">Limit</label>
+                <span class="form-element-error" id="create-creditcard-limit-error" hidden></span>
             </div>
             <button class="form-button" type="submit">Create Credit Card</button>
             <button class="form-button" type="button" onclick="toggleCreateCreditCardModal()">Cancel</button>
@@ -94,11 +91,12 @@
         <p>Are you sure you want to pay the bill of <strong id="pay-creditcard-name"></strong>?</p>
             {% csrf_token %}
             <input type="hidden" name="creditcard" id="pay-creditcard-id">
-            <div class="form-input-container">
+            <div class="form-input-container form-element-container">
                 <input type="number" name="amount" placeholder="" required class="form-input" id="pay-creditcard-amount" step="0.01" min="0.01">
                 <label for="pay-creditcard-amount" class="form-input-label">Amount</label>
+                <span class="form-element-error" id="pay-creditcard-amount-error" hidden></span>
             </div>
-            <div class="form-select-container">
+            <div class="form-select-container form-element-container">
                 <select name="account" required class="form-select" id="pay-creditcard-account">
                     <option value="" hidden selected>Account</option>
                     {% for account in accounts %}
@@ -106,6 +104,7 @@
                     {% endfor %}
                 </select>
                 <label for="pay-creditcard-account" class="form-select-label">Account</label>
+                <span class="form-element-error" id="pay-creditcard-account-error" hidden></span>
             </div>
             <button class="form-button" type="submit">Pay Bill</button>
             <button class="form-button" type="button" onclick="togglePayCreditCardModal()">Cancel</button>

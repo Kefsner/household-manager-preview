@@ -6,6 +6,7 @@ from categories.models import Category, Subcategory
 from accounts.models import Account
 from users.models import User
 
+from dateutil.parser import parser
 from datetime import datetime
 from decimal import Decimal
 
@@ -95,9 +96,9 @@ class BaseTransactionSerializer:
         if not self.date:
             raise SerializerException({'date': 'This field is required'})
         try:
-            self.date = datetime.strptime(self.date, '%d-%m-%Y').date()
+            self.date = parser().parse(self.date).date()
         except:
-            raise SerializerException({'date': 'Invalid date format. Must be DD-MM-YYYY'})
+            raise SerializerException({'date': 'Invalid date format'})
 
 class CreateTransactionSerializer(BaseTransactionSerializer):
     def __init__(self, data: QueryDict, db: str) -> None:
@@ -134,8 +135,9 @@ class CreateTransactionSerializer(BaseTransactionSerializer):
     def validate_subcategory(self) -> None:
         if not Subcategory.objects.filter(id=self.subcategory, db=self.db).exists():
             raise SerializerException({'subcategory': 'Invalid subcategory'})
+        category = Category.objects.get(id=self.category)
         subcategory = Subcategory.objects.get(id=self.subcategory)
-        if subcategory.category != self.category:
+        if subcategory.category != category:
             raise SerializerException({'subcategory': 'Invalid subcategory'})
 
 

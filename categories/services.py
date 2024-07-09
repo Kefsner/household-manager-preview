@@ -13,7 +13,7 @@ class CategoryServices:
         category.save(request)
         return 'Category created successfully.'
     
-    def add_subcategory(self, request: HttpRequest, category: Category) -> str:
+    def create_subcategory(self, request: HttpRequest, category: Category) -> str:
         subcategory = Subcategory()
         subcategory.name = self.data['name']
         subcategory.category = category

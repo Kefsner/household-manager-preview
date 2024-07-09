@@ -19,10 +19,10 @@
             <p class="welcome-message">In order to start, you need to create at least one category.</p>
         {% endif %}
         {% if not accounts %}
-            <p class="welcome-message">Click <a class="main-anchor-tag" href="{% url 'accounts:home' %}">here</a> for access the accounts page.</p>
+            <p class="welcome-message">Click <a class="main-anchor-tag" href="{% url 'accounts:home' %}">here</a> for access the accounts page, or use the navigation bar in the top right corner.</p>
         {% endif %}
         {% if not categories %}
-            <p class="welcome-message">Click <a class="main-anchor-tag" href="{% url 'categories:home' %}">here</a> for access the categories page.</p>
+            <p class="welcome-message">Click <a class="main-anchor-tag" href="{% url 'categories:home' %}">here</a> for access the categories page, or use the navigation bar in the top right corner.</p>
         {% endif %}
     </div>
 {% else %}

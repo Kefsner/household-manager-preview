@@ -1,10 +1,10 @@
 from django.http import QueryDict
 
 from core.exceptions import SerializerException
-from categories.models import Category
 
 class CreateCategorySerializer:
-    def __init__(self, data: QueryDict) -> None:
+    def __init__(self, data: QueryDict, db: str) -> None:
+        self.db = db
         self.name = data.get('name', None)
         self.type = data.get('type', None)
         self.validate_data()
@@ -19,15 +19,15 @@ class CreateCategorySerializer:
 
     def validate_name(self) -> None:
         if not self.name:
-            raise SerializerException({'name_error': 'The field is required'})
+            raise SerializerException({'name': 'The field is required'})
         
     def validate_type(self) -> None:
         if not self.type:
-            raise SerializerException({'type_error': 'The field is required'})
+            raise SerializerException({'type': 'The field is required'})
         if self.type not in ['income', 'expense']:
-            raise SerializerException({'type_error': 'The field must be either income or expense'})
+            raise SerializerException({'type': 'The field must be either income or expense'})
         
-class AddSubcategorySerializer:
+class CreateSubcategorySerializer:
     def __init__(self, data: QueryDict) -> None:
         self.name = data.get('name', None)
         self.description = data.get('description', None)
@@ -43,11 +43,9 @@ class AddSubcategorySerializer:
 
     def validate_name(self) -> None:
         if not self.name:
-            raise SerializerException({'name_error': 'The field is required'})
+            raise SerializerException({'name': 'The field is required'})
 
     def validate_description(self) -> None:
-        if not self.description:
-            raise SerializerException({'description_error': 'The field is required'})
         if len(self.description) > 255:
-            raise SerializerException({'description_error': 'The field must be less than 255 characters'})
+            raise SerializerException({'description': 'The field must be less than 255 characters'})
         

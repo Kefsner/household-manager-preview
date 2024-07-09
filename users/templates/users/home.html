@@ -28,13 +28,6 @@
             </tbody>
         </table>
     </div>
-    {% if success %}
-        <p class="message">{{ success }}</p>
-    {% endif %}
-    {% if error %}
-        <p class="message">{{ error }}</p>
-    {% endif %}
-
     <div class="modal-container" id="delete-user-modal">
         <form id="delete-user-form" method="POST">
         <h2>Delete User</h2>
@@ -47,17 +40,20 @@
     <div class="modal-container" id="create-user-modal">
         <form method="POST" id="create-user-form" action="{% url 'users:create' %}">
             {% csrf_token %}
-            <div class="form-input-container">
+            <div class="form-input-container form-element-container">
                 <input type="text" name="username" required id="create-user-username" class="form-input" placeholder="">
                 <label for="create-user-username" class="form-input-label">Username</label>
+                <span class="form-element-error" id="create-user-username-error"></span>
             </div>
-            <div class="form-input-container">
+            <div class="form-input-container form-element-container">
                 <input type="password" name="password" required id="create-user-password" class="form-input" placeholder="">
                 <label for="create-user-password" class="form-input-label">Password</label>
+                <span class="form-element-error" id="create-user-password-error"></span>
             </div>
-            <div class="form-input-container">
+            <div class="form-input-container form-element-container">
                 <input type="password" name="password_confirm" required id="create-user-confirm-password" class="form-input" placeholder="">
                 <label for="create-user-confirm-password" class="form-input-label">Confirm Password</label>
+                <span class="form-element-error" id="create-user-confirm-password-error"></span>
             </div>
             <button class="form-button" type="submit">Create</button>
             <button class="form-button" type="button" onclick="toggleCreateUserModal()">Cancel</button>

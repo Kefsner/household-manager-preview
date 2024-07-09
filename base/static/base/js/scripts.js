@@ -6,15 +6,35 @@ function openTransactionModal(type) {
 
 function toggleTransactionModal(type) {
     const modal = document.getElementById(type + "-form-container");
+    if (modal.classList.contains('show')) {
+        const form = modal.querySelector('form');
+        form.reset();
+        const fields = form.querySelectorAll('input, select');
+        console.log(fields);
+        fields.forEach(input => {
+            input.classList.remove('error');
+        });
+        const spans = form.querySelectorAll('span');
+        spans.forEach(span => {
+            span.hidden = true;
+            span.innerHTML = '';
+        });
+        // Remove the url field from the form
+        const urlInput = form.querySelector('input[name="url"]');
+        if (urlInput) {
+            form.removeChild(urlInput);
+        }
+    } else {
+        // Add current url as a field in the form
+        const currentUrl = window.location.href;
+        const form = modal.querySelector('form');
+        const urlInput = document.createElement('input');
+        urlInput.type = 'hidden';
+        urlInput.name = 'url';
+        urlInput.value = currentUrl;
+        form.appendChild(urlInput);
+    }
     modal.classList.toggle('show');
-    // Add current url as a field in the form
-    const currentUrl = window.location.href;
-    const form = modal.querySelector('form');
-    const urlInput = document.createElement('input');
-    urlInput.type = 'hidden';
-    urlInput.name = 'url';
-    urlInput.value = currentUrl;
-    form.appendChild(urlInput);
 }
 
 function toggleOpenModelButton() {
@@ -96,6 +116,8 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('DOMContentLoaded', function () {
     const message = document.querySelector('.message-content');
     const tags = document.querySelector('.message-tags');
+    console.log(message);
+    console.log(tags);
     if (message && tags) {
         const [form, field] = tags.innerHTML.split(' ');
         if (form === 'page') {
