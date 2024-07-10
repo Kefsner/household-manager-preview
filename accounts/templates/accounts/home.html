@@ -1,75 +1,80 @@
-{% extends "base/base.html" %}
-
+{% extends 'base/base.html' %}
 {% load static %}
-
 {% block title %}
-    Accounts
+  Accounts
 {% endblock %}
 
 {% block content %}
-    <a class="main-anchor-tag"  href="#" onclick="openCreateAccountModal()">Create Account</a>
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Owner</th>
-                    <th>Balance</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for account in accounts %}
-                    <tr>
-                        <td>{{ account.name }}</td>
-                        <td>{{ account.user.username }}</td>
-                        <td>R$ {{ account.balance }}</td>
-                        <td>
-                            <a href="#" onclick="openDeleteAccountModal({{ account.id }}, '{{ account.name }}')">Delete</a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <div class="modal-container" id="delete-account-modal">
-        <form id="delete-account-form" method="POST">
-        <h2>Delete Account</h2>
-        <p>Are you sure you want to delete the account <strong id="account-name"></strong>?</p>
-            {% csrf_token %}
-            <button class="form-button delete" type="submit">Delete</button>
-            <button class="form-button" type="button" onclick="toggleDeleteAccountModal()">Cancel</button>
-        </form>
-    </div>
-    <div class="modal-container" id="create-account-modal">
-        <form method="POST" id="create-account-form" action="{% url 'accounts:create' %}">
-            {% csrf_token %}
-            <div class="form-select-container form-element-container">
-                <select required name="user" id="create-account-user" class="form-select">
-                    <option value="" hidden selected>Account Owner</option>
-                    {% for user in users %}
-                        <option value="{{ user.id }}">{{ user.username }}</option>
-                    {% endfor %}
-                </select>
-                <label for="create-account-user" class="form-select-label">Account Owner</label>
-                <span class="form-element-error" id="create-account-user-error" hidden></span>
-            </div>
-            <div class="form-input-container form-element-container">
-                <input type="text" name="name" placeholder="" required class="form-input" id="create-account-name">
-                <label for="create-account-name" class="form-input-label">Account Name</label>
-                <span class="form-element-error" id="create-account-name-error" hidden></span>
-            </div>
-            <div class="form-input-container form-element-container">
-                <input type="number" name="initial_balance" placeholder="" required class="form-input" step="0.01" id="create-account-initial-balance">
-                <label for="create-account-initial-balance" class="form-input-label">Initial Balance</label>
-                <span class="form-element-error" id="create-account-initial_balance-error" hidden></span>
-            </div>
-            <button class="form-button" type="submit">Create Account</button>
-            <button class="form-button" type="button" onclick="toggleCreateAccountModal()">Cancel</button>
-        </form>
-    </div>
+  <a class="main-anchor-tag" href="#" onclick="toggleModal('create-account-modal')">Create Account</a>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Owner</th>
+          <th>Balance</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for account in accounts %}
+          <tr>
+            <td>{{ account.name }}</td>
+            <td>{{ account.user.username }}</td>
+            <td>R$ {{ account.balance }}</td>
+            <td>
+              <a href="#" onclick="openDeleteModal('account', {{ account.id }}, '{{ account.name }}')">Delete</a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="4">No accounts</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="modal-container" id="delete-account-modal">
+    <form id="delete-account-form" method="POST">
+      <h2>Delete Account</h2>
+      <p>
+        Are you sure you want to delete the account
+        <strong id="account-name"></strong>?
+      </p>
+      {% csrf_token %}
+      <button class="form-button delete" type="submit">Delete</button>
+      <button class="form-button" type="button" onclick="toggleModal('delete-account-modal')">Cancel</button>
+    </form>
+  </div>
+  <div class="modal-container" id="create-account-modal">
+    <form method="POST" id="create-account-form" action="{% url 'accounts:create' %}">
+      {% csrf_token %}
+      <div class="form-select-container form-element-container">
+        <select required name="user" id="create-account-user" class="form-select">
+          <option value="" hidden selected>Account Owner</option>
+          {% for user in users %}
+            <option value="{{ user.id }}">{{ user.username }}</option>
+          {% endfor %}
+        </select>
+        <label for="create-account-user" class="form-select-label">Account Owner</label>
+        <span class="form-element-error" id="create-account-user-error" hidden></span>
+      </div>
+      <div class="form-input-container form-element-container">
+        <input type="text" name="name" placeholder="" required class="form-input" id="create-account-name" />
+        <label for="create-account-name" class="form-input-label">Account Name</label>
+        <span class="form-element-error" id="create-account-name-error" hidden></span>
+      </div>
+      <div class="form-input-container form-element-container">
+        <input type="number" name="initial_balance" placeholder="" required class="form-input" step="0.01" id="create-account-initial-balance" />
+        <label for="create-account-initial-balance" class="form-input-label">Initial Balance</label>
+        <span class="form-element-error" id="create-account-initial_balance-error" hidden></span>
+      </div>
+      <button class="form-button" type="submit">Create Account</button>
+      <button class="form-button" type="button" onclick="toggleModal('create-account-modal')">Cancel</button>
+    </form>
+  </div>
 {% endblock %}
 
 {% block scripts %}
-    <script src="{% static 'accounts/js/scripts.js' %}"></script>
+  <script src="{% static 'accounts/js/scripts.js' %}"></script>
 {% endblock %}

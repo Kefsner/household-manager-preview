@@ -6,7 +6,7 @@ from django.db.models import Sum
 from django.views import View
 
 from accounts.models import Transaction, Account
-from creditcards.models import CreditCard
+from creditcards.models import CreditCard, CreditCardTransaction
 
 import json
 
@@ -54,6 +54,10 @@ class BaseView(LoginRequiredMixin, View):
         # Last 5 transactions
         transactions = Transaction.objects.filter(db=request.user.db).order_by('-date')[:5]
         context['transactions'] = transactions
+
+        # Last 5 credit card transactions
+        creditcard_transactions = CreditCardTransaction.objects.filter(db=request.user.db).order_by('-date')[:5]
+        context['creditcard_transactions'] = creditcard_transactions
 
         # Total in accounts
         accounts = Account.objects.filter(db=request.user.db)

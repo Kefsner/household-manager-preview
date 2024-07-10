@@ -8,7 +8,7 @@
 
 {% block content %}
     {% if accounts %}
-        <a class="main-anchor-tag" href="#" onclick="openCreateCreditCardModal()">Create Credit Card</a>
+        <a class="main-anchor-tag" href="#" onclick="toggleModal('create-creditcard-modal')">Create Credit Card</a>
     {% else %}
         <p class="message">You need to create an account before creating a credit card.</p>
     {% endif %}
@@ -37,8 +37,12 @@
                             <a href="#" onclick="openPayCreditCardModal({{ creditcard.id }}, '{{ creditcard.name }}')">Pay Bill</a>
                         </td>
                         <td>
-                            <a href="#" onclick="openDeleteCreditCardModal({{ creditcard.id }}, '{{ creditcard.name }}')">Delete</a>
+                            <a href="#" onclick="openDeleteModal('creditcard', {{ creditcard.id }}, '{{ creditcard.name }}')">Delete</a>
                         </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6">No credit cards</td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -50,7 +54,7 @@
         <p>Are you sure you want to delete the credit card <strong id="creditcard-name"></strong>?</p>
             {% csrf_token %}
             <button class="form-button delete" type="submit">Delete</button>
-            <button class="form-button" type="button" onclick="toggleDeleteCreditCardModal()">Cancel</button>
+            <button class="form-button" type="button" onclick="toggleModal('delete-creditcard-modal')">Cancel</button>
         </form>
     </div>
     <div class="modal-container" id="create-creditcard-modal">
@@ -82,7 +86,7 @@
                 <span class="form-element-error" id="create-creditcard-limit-error" hidden></span>
             </div>
             <button class="form-button" type="submit">Create Credit Card</button>
-            <button class="form-button" type="button" onclick="toggleCreateCreditCardModal()">Cancel</button>
+            <button class="form-button" type="button" onclick="toggleModal('create-creditcard-modal')">Cancel</button>
         </form>
     </div>
     <div class="modal-container" id="pay-creditcard-modal">
@@ -107,7 +111,7 @@
                 <span class="form-element-error" id="pay-creditcard-account-error" hidden></span>
             </div>
             <button class="form-button" type="submit">Pay Bill</button>
-            <button class="form-button" type="button" onclick="togglePayCreditCardModal()">Cancel</button>
+            <button class="form-button" type="button" onclick="toggleModal('pay-creditcard-modal')">Cancel</button>
         </form>
     </div>
 {% endblock %}

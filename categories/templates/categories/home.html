@@ -11,8 +11,8 @@
 {% endblock %}
 
 {% block content %}
-    <a class="main-anchor-tag" href="#" onclick="openCreateCategoryModal()">Create Category</a>
-    <a class="main-anchor-tag" href="#" onclick="openCreateDefaultCategoriesModal()">Create Default Categories</a>
+    <a class="main-anchor-tag" href="#" onclick="toggleModal('create-category-modal')">Create Category</a>
+    <a class="main-anchor-tag" href="#" onclick="toggleModal('create-default-categories-modal')">Create Default Categories</a>
     <div class="subcategories-actions">
         <a class="main-anchor-tag" href="#" onclick="expandAllSubcategories(); return false;">Expand All Subcategories</a>
         <a class="main-anchor-tag" href="#" onclick="collapseAllSubcategories(); return false;">Collapse All Subcategories</a>
@@ -48,19 +48,25 @@
                                             <td>{{ subcategory.name }}</td>
                                             <td>{{ subcategory.description }}</td>
                                             <td>
-                                                <a href='#' onclick="openDeleteSubcategoryModal({{ subcategory.id }}, '{{ subcategory.name }}')">Delete</a>
+                                                <a href='#' onclick="openDeleteModal('subcategory', {{ subcategory.id }}, '{{ subcategory.name }}')">Delete</a>
                                             </td>
                                         </tr>
                                     {% empty %}
-                                        <tr><td>No subcategories</td></tr>
+                                        <tr>
+                                            <td colspan="3">No subcategories</td>
+                                        </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
                         </td>
                         <td>
                             <a href="#" onclick="openCreateSubcategoryModal({{ category.id }}, '{{ category.name }}')">Create Subcategory</a>
-                            <a href='#' onclick="openDeleteCategoryModal({{ category.id }}, '{{ category.name }}')">Delete</a>
+                            <a href='#' onclick="openDeleteModal('category', {{ category.id }}, '{{ category.name }}')">Delete</a>
                         </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">No categories</td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -72,7 +78,7 @@
         <p>Are you sure you want to delete the category <strong id="category-name"></strong>?</p>
             {% csrf_token %}
             <button class="form-button delete" type="submit">Delete</button>
-            <button class="form-button" type="button" onclick="toggleDeleteCategoryModal()">Cancel</button>
+            <button class="form-button" type="button" onclick="toggleModal('delete-category-modal')">Cancel</button>
         </form>
     </div>
     <div class="modal-container" id="create-category-modal">
@@ -93,7 +99,7 @@
                 <span class="form-element-error" id="create-category-type-error" hidden></span>
             </div>
             <button class="form-button" type="submit">Create Category</button>
-            <button class="form-button" type="button" onclick="toggleCreateCategoryModal()">Cancel</button>
+            <button class="form-button" type="button" onclick="toggleModal('create-category-modal')">Cancel</button>
         </form>
     </div>
     <div class="modal-container" id="create-subcategory-modal">
@@ -112,7 +118,7 @@
                 <span class="form-element-error" id="create-subcategory-description-error" hidden></span>
             </div>
             <button class="form-button" type="submit">Create Subcategory</button>
-            <button class="form-button" type="button" onclick="toggleCreateSubcategoryModal()">Cancel</button>
+            <button class="form-button" type="button" onclick="toggleModal('create-subcategory-modal')">Cancel</button>
         </form>
     </div>
     <div class="modal-container" id="delete-subcategory-modal">
@@ -121,7 +127,7 @@
         <p>Are you sure you want to delete the subcategory <strong id="subcategory-name"></strong>?</p>
             {% csrf_token %}
             <button class="form-button delete" type="submit">Delete</button>
-            <button class="form-button" type="button" onclick="toggleDeleteSubcategoryModal()">Cancel</button>
+            <button class="form-button" type="button" onclick="toggleModal('delete-subcategory-modal')">Cancel</button>
         </form>
     </div>
     <div class="modal-container" id="create-default-categories-modal">
@@ -130,7 +136,7 @@
         <p>Are you sure you want to create the default categories?</p>
             {% csrf_token %}
             <button class="form-button" type="submit">Create Default Categories</button>
-            <button class="form-button" type="button" onclick="toggleCreateDefaultCategoriesModal()">Cancel</button>
+            <button class="form-button" type="button" onclick="toggleModal('create-default-categories-modal')">Cancel</button>
         </form>
     </div>
 {% endblock %}

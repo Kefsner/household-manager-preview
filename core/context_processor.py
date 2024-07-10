@@ -8,19 +8,17 @@ from datetime import datetime
 
 def context(request):
     if request.user.is_authenticated:
-        categories = Category.objects.filter(db=request.user.db)
-        subcategories = Subcategory.objects.filter(db=request.user.db)
-        accounts = Account.objects.filter(db=request.user.db)
-        creditcards = CreditCard.objects.filter(db=request.user.db)
+        categories = Category.objects.filter(db=request.user.db).order_by('name')
+        subcategories = Subcategory.objects.filter(db=request.user.db).order_by('name')
+        accounts = Account.objects.filter(db=request.user.db).order_by('name')
+        creditcards = CreditCard.objects.filter(db=request.user.db).order_by('name')
         today = datetime.now().date().strftime('%Y-%m-%d')
-        form_errors = request.session.get('form_errors')
         context = {
             'categories': categories,
             'subcategories': subcategories,
             'accounts': accounts,
             'creditcards': creditcards,
-            'today': today,
-            'form_errors': form_errors
+            'today': today
         }
         messages = list(msgs.get_messages(request))
         if messages and messages[-1].message == 'register':

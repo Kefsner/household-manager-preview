@@ -1,69 +1,98 @@
-{% extends "base/base.html" %}
+{% extends 'base/base.html' %}
 
 {% load static %}
 
 {% block title %}
-    Home
+  Home
 {% endblock %}
 
 {% block content %}
-
-{% if not accounts or not categories %}
+  {% if not accounts or not categories %}
     <div class="welcome-container">
-        <h2 class="welcome-title">Welcome to Household Manager!</h2>
-        {% if not accounts and not categories %}
-            <p class="welcome-message">In order to start, you need to create at least one account and one category.</p>
-        {% elif not accounts %}
-            <p class="welcome-message">In order to start, you need to create at least one account.</p>
-        {% elif not categories %}
-            <p class="welcome-message">In order to start, you need to create at least one category.</p>
-        {% endif %}
-        {% if not accounts %}
-            <p class="welcome-message">Click <a class="main-anchor-tag" href="{% url 'accounts:home' %}">here</a> for access the accounts page, or use the navigation bar in the top right corner.</p>
-        {% endif %}
-        {% if not categories %}
-            <p class="welcome-message">Click <a class="main-anchor-tag" href="{% url 'categories:home' %}">here</a> for access the categories page, or use the navigation bar in the top right corner.</p>
-        {% endif %}
+      <h2 class="welcome-title">Welcome to Household Manager!</h2>
+      {% if not accounts and not categories %}
+        <p class="welcome-message">In order to start, you need to create at least one account and one category.</p>
+      {% elif not accounts %}
+        <p class="welcome-message">In order to start, you need to create at least one account.</p>
+      {% elif not categories %}
+        <p class="welcome-message">In order to start, you need to create at least one category.</p>
+      {% endif %}
+      {% if not accounts %}
+        <p class="welcome-message">
+          Click <a class="main-anchor-tag" href="{% url 'accounts:home' %}">here</a> for access the accounts page, or use the navigation bar in the top right corner.
+        </p>
+      {% endif %}
+      {% if not categories %}
+        <p class="welcome-message">
+          Click <a class="main-anchor-tag" href="{% url 'categories:home' %}">here</a> for access the categories page, or use the navigation bar in the top right corner.
+        </p>
+      {% endif %}
     </div>
-{% else %}
-    {% include "base/charts.html" %}
+  {% else %}
+    {% include 'base/charts.html' %}
     <div class="cards-container">
+      <div class="card">
+        <h3>R$ {{ total_in_accounts }}</h3>
+        <p>Total in Accounts</p>
+      </div>
+      {% if creditcards %}
         <div class="card">
-            <h3>R$ {{ total_in_accounts }}</h3>
-            <p>Total in Accounts</p>
+          <h3>R$ {{ total_next_credit_card_bill }}</h3>
+          <p>Next Credit Card Bill</p>
         </div>
-        {% if creditcards %}
-            <div class="card">
-                <h3>R$ {{ total_next_credit_card_bill }}</h3>
-                <p>Next Credit Card Bill</p>
-            </div>
-        {% endif %}
+      {% endif %}
     </div>
     <div class="table-container">
-        <h2>Recent Transactions</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Amount</th>
-                    <th>Category</th>
-                    <th>Account</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for transaction in transactions %}
-                    <tr>
-                        <td>R$ {{ transaction.amount }}</td>
-                        <td>{{ transaction.category.name }}</td>
-                        <td>{{ transaction.account.name }}</td>
-                        <td>{{ transaction.date }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+      <h2>Recent Transactions</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Amount</th>
+            <th>Category</th>
+            <th>Account</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for transaction in transactions %}
+            <tr>
+              <td>R$ {{ transaction.amount }}</td>
+              <td>{{ transaction.category.name }}</td>
+              <td>{{ transaction.account.name }}</td>
+              <td>{{ transaction.date }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
-{% endif %}
+    <div class="table-container">
+      <h2>Recent Credit Card Transactions</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Amount</th>
+            <th>Installments</th>
+            <th>Category</th>
+            <th>Credit Card</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for creditcard_transaction in creditcard_transactions %}
+            <tr>
+              <td>R$ {{ creditcard_transaction.amount }}</td>
+              <td>{{ creditcard_transaction.installments }}</td>
+              <td>{{ creditcard_transaction.category.name }}</td>
+              <td>{{ creditcard_transaction.credit_card.name }}</td>
+              <td>{{ creditcard_transaction.date }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
 {% endblock %}
 
 {% block scripts %}
+
 {% endblock %}

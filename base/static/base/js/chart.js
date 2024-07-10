@@ -6,7 +6,7 @@ const incomeData = JSON.parse(incomeDataElement.textContent);
 
 const incomePlugin = {
     id: 'centerText',
-    afterDraw: function(chart) {
+    afterDraw: function (chart) {
         let sum = 0;
         chart.data.datasets.forEach((dataset) => {
             sum += dataset.data.reduce((a, b) => a + b, 0);
@@ -60,7 +60,7 @@ const incomeChart = new Chart(incomeCtx, {
             },
             tooltip: {
                 callbacks: {
-                    label: function(context) {
+                    label: function (context) {
                         return `R$ ${context.raw.toFixed(2)}`;
                     },
                 },
@@ -80,7 +80,7 @@ const expenseData = JSON.parse(expenseDataElement.textContent);
 
 const expensePlugin = {
     id: 'centerText',
-    afterDraw: function(chart) {
+    afterDraw: function (chart) {
         let sum = 0;
         chart.data.datasets.forEach((dataset) => {
             sum += dataset.data.reduce((a, b) => a + b, 0);
@@ -133,7 +133,7 @@ const expenseChart = new Chart(expenseCtx, {
             },
             tooltip: {
                 callbacks: {
-                    label: function(context) {
+                    label: function (context) {
                         return `R$ ${context.raw.toFixed(2)}`;
                     },
                 },
@@ -160,7 +160,7 @@ const balanceData = {
 
 const balancePlugin = {
     id: 'centerText',
-    afterDraw: function(chart) {
+    afterDraw: function (chart) {
         const sum = totalIncome - totalExpense;
 
         const ctx = chart.ctx;
@@ -204,7 +204,7 @@ const balanceChart = new Chart(balanceCtx, {
             },
             tooltip: {
                 callbacks: {
-                    label: function(context) {
+                    label: function (context) {
                         amount = parseFloat(context.raw)
                         return `R$ ${amount.toFixed(2)}`;
                     },

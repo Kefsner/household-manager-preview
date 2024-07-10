@@ -96,7 +96,7 @@ nav {
     background-color: #4c7c85;
 }
 
-#transaction-modal {
+#circle-button-content {
     display: none;
     position: fixed;
     bottom: 80px;
@@ -108,7 +108,7 @@ nav {
     z-index: 2;
 }
 
-#transaction-modal.show {
+#circle-button-content.show {
     display: flex;
     flex-direction: column;
     align-items: center;
