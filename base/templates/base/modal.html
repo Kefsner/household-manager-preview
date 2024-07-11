@@ -212,7 +212,7 @@
       <span class="form-element-error" id="creditcard-subcategory-error" hidden></span>
     </div>
     <div class="form-select-container form-element-container">
-      <select name="credit_card" required class="form-select" id="creditcard-card">
+      <select name="creditcard" required class="form-select" id="creditcard-card">
         <option value="" hidden selected>Credit Card</option>
         {% for creditcard in creditcards %}
           <option value="{{ creditcard.id }}">{{ creditcard.name }}</option>

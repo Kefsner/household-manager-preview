@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.contrib import messages as msgs
 from django.views import View
@@ -11,7 +12,7 @@ from core.logger import Logger
 
 import traceback
 
-class UserView(View):
+class UserView(LoginRequiredMixin, View):
     def get(self, request):
         try:
             users = User.objects.filter(db=request.user.db)
@@ -29,14 +30,13 @@ class UserView(View):
 class CreateUserView(View):
     def post(self, request):
         try:
-            serializer = CreateUserSerializer(
-                data=request.POST,
-                db=request.user.db
-            )
+            serializer = CreateUserSerializer(data=request.POST)
             data = serializer.validated_data
             services = UserServices(data)
             msgs.success(request, services.create_user(request), extra_tags='success')
-            return redirect('users:home')
+            if request.user.is_authenticated:
+                return redirect('users:home')
+            return redirect('authentication:login')
         except SerializerException as e:
             for field, error in e.errors.items():
                 extra_tags = 'page ' + field
@@ -52,7 +52,7 @@ class CreateUserView(View):
             )
             return render(request, 'core/error.html')
         
-class DeleteUserView(View):
+class DeleteUserView(LoginRequiredMixin, View):
     def post(self, request, pk):
         try:
             user = User.objects.get(id=pk)

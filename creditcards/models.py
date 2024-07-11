@@ -45,7 +45,7 @@ class CreditCard(MetaData):
         next_due_date = self.next_due_date
         if next_due_date:
             next_bill_amount = CreditCardInstallment.objects.filter(
-                credit_card_transaction__credit_card=self,
+                creditcard_transaction__creditcard=self,
                 due_date=next_due_date,
                 paid=False
             ).aggregate(total_amount=Sum('amount'))['total_amount'] or Decimal('0.00')
@@ -58,11 +58,11 @@ class CreditCardTransaction(MetaData):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     subcategory = models.ForeignKey(Subcategory, on_delete=models.CASCADE, null=True)
     date = models.DateField()
-    credit_card = models.ForeignKey(CreditCard, on_delete=models.CASCADE, related_name='transactions')
+    creditcard = models.ForeignKey(CreditCard, on_delete=models.CASCADE, related_name='transactions')
     installments = models.IntegerField()
 
 class CreditCardInstallment(MetaData):
-    credit_card_transaction = models.ForeignKey(CreditCardTransaction, on_delete=models.CASCADE, related_name='transaction_installments')
+    creditcard_transaction = models.ForeignKey(CreditCardTransaction, on_delete=models.CASCADE, related_name='transaction_installments')
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     due_date = models.DateField()
     installment_number = models.IntegerField()

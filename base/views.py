@@ -67,5 +67,5 @@ class BaseView(LoginRequiredMixin, View):
         # Total next credit card bill
         creditcards = CreditCard.objects.filter(db=request.user.db)
         total = sum([creditcard.next_bill_amount for creditcard in creditcards])
-        context['total_next_credit_card_bill'] = total
+        context['total_next_creditcard_bill'] = total
         return render(request, 'base/home.html', context)

@@ -73,9 +73,9 @@ class DeleteCategoryView(LoginRequiredMixin, View):
             return render(request, 'core/error.html')
         
 class CreateSubcategoryView(LoginRequiredMixin, View):
-    def post(self, request, pk):
+    def post(self, request, category_id):
         try:
-            category = Category.objects.get(pk=pk)
+            category = Category.objects.get(id=category_id)
             serializer = CreateSubcategorySerializer(data=request.POST)
             data = serializer.validated_data
             services = CategoryServices(data)

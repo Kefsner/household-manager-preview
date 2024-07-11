@@ -37,7 +37,7 @@
       </div>
       {% if creditcards %}
         <div class="card">
-          <h3>R$ {{ total_next_credit_card_bill }}</h3>
+          <h3>R$ {{ total_next_creditcard_bill }}</h3>
           <p>Next Credit Card Bill</p>
         </div>
       {% endif %}
@@ -87,7 +87,7 @@
               <td>R$ {{ creditcard_transaction.amount }}</td>
               <td>{{ creditcard_transaction.installments }}</td>
               <td>{{ creditcard_transaction.category.name }}</td>
-              <td>{{ creditcard_transaction.credit_card.name }}</td>
+              <td>{{ creditcard_transaction.creditcard.name }}</td>
               <td>{{ creditcard_transaction.date }}</td>
             </tr>
           {% empty %}

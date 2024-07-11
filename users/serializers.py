@@ -10,8 +10,7 @@ class CreateUserSerializer:
     It creates a dictionary with the validated data and fills the errors dictionary, if any,
     after calling the validate_data method.
     """
-    def __init__(self, data: QueryDict, db: str) -> None:
-        self.db = db
+    def __init__(self, data: QueryDict) -> None:
         self.username = data.get('username', None)
         self.password = data.get('password', None)
         self.password_confirm = data.get('password_confirm', None)

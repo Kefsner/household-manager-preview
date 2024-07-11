@@ -11,6 +11,6 @@ urlpatterns = [
     path(f'{settings.DELETE_URL}/<int:pk>/', DeleteCategoryView.as_view(), name='delete'),
     path("create/default/", CreateDefaultCategoriesView.as_view(), name='create-default'),
 
-    path('<int:pk>/create-subcategory/', CreateSubcategoryView.as_view(), name='create-subcategory'),
+    path('<int:category_id>/create_subcategory/', CreateSubcategoryView.as_view(), name='create-subcategory'),
     path(f'{settings.DELETE_URL}/subcategory/<int:pk>/', DeleteSubcategoryView.as_view(), name='delete-subcategory'),
 ]

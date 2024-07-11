@@ -54,7 +54,7 @@ class CreateCreditCardSerializer:
 class CreateCreditCardTransactionSerializer:
     def __init__(self, data: QueryDict, db: str) -> None:
         self.db = db
-        self.credit_card = data.get('credit_card', None)
+        self.creditcard = data.get('creditcard', None)
         self.description = data.get('description', None)
         self.amount = data.get('amount', None)
         self.category = data.get('category', None)
@@ -64,7 +64,7 @@ class CreateCreditCardTransactionSerializer:
         self.validate_data()
 
     def validate_data(self) -> None:
-        self.validate_credit_card()
+        self.validate_creditcard()
         self.validate_description()
         self.validate_amount()
         self.validate_category()
@@ -72,7 +72,7 @@ class CreateCreditCardTransactionSerializer:
         self.validate_installments()
         self.validate_date()
         self.validated_data = {
-            'credit_card': self.credit_card,
+            'creditcard': self.creditcard,
             'description': self.description,
             'amount': self.amount,
             'category': self.category,
@@ -81,9 +81,9 @@ class CreateCreditCardTransactionSerializer:
             'date': self.date
         }
 
-    def validate_credit_card(self) -> None:
-        if not self.credit_card:
-            raise SerializerException({'credit_card': 'The field is required'})
+    def validate_creditcard(self) -> None:
+        if not self.creditcard:
+            raise SerializerException({'creditcard': 'The field is required'})
         
     def validate_description(self) -> None:
         if not self.description:
@@ -132,7 +132,7 @@ class PayCreditCardSerializer:
         self.validate_amount()
         self.validate_account()
         self.validated_data = {
-            'credit_card': self.credit_card,
+            'creditcard': self.creditcard,
             'amount': self.amount,
             'account': self.account
         }

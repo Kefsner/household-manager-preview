@@ -38,7 +38,7 @@ class CreateCreditCardView(LoginRequiredMixin, View):
             )
             data = serializer.validated_data
             services = CreditCardServices(data)
-            msgs.success(request, services.create_credit_card(request))
+            msgs.success(request, services.create_creditcard(request))
             return redirect('creditcards:home')
         except SerializerException as e:
             for field, error in e.errors.items():
@@ -61,8 +61,8 @@ class CreateCreditCardView(LoginRequiredMixin, View):
 class DeleteCreditCardView(LoginRequiredMixin, View):
     def post(self, request, pk):
         try:
-            credit_card = CreditCard.objects.get(id=pk)
-            credit_card.delete()
+            creditcard = CreditCard.objects.get(id=pk)
+            creditcard.delete()
             msgs.success(request, 'Credit card deleted successfully')
             return redirect('creditcards:home')
         except Exception as e:
@@ -106,16 +106,16 @@ class CreateTransactionView(LoginRequiredMixin, View):
 class PayCreditCardView(LoginRequiredMixin, View):
     def post(self, request, pk):
         try:
-            credit_card = CreditCard.objects.get(id=pk)
+            creditcard = CreditCard.objects.get(id=pk)
             serializer = PayCreditCardSerializer(data=request.POST)
             data = serializer.validated_data
             services = CreditCardServices(data)
-            services.pay_credit_card(request, credit_card)
+            services.pay_creditcard(request, creditcard)
             msgs.success(request, 'Credit card paid successfully')
             return redirect('creditcards:home')
         except SerializerException as e:
             for field, error in e.errors.items():
-                extra_tags = 'page ' + field + '_' + str(pk) + '-' + credit_card.name + '_pay'
+                extra_tags = 'page ' + field + '_' + str(pk) + '-' + creditcard.name + '_pay'
                 msgs.error(request, error, extra_tags=extra_tags)
             return redirect('creditcards:home')
         except CreditCardException as e:
