@@ -23,7 +23,9 @@
             <td>{{ account.user.username }}</td>
             <td>R$ {{ account.balance }}</td>
             <td>
-              <a href="#" onclick="openDeleteModal('account', {{ account.id }}, '{{ account.name }}')">Delete</a>
+              <a href="#" onclick="openDeleteModal('account', {{ account.id }}, '{{ account.name }}')" class="delete-item">
+                <img src="{% static 'base/icon/trash-can.svg' %}" alt="Delete" class="delete-item-icon" />
+              </a>
             </td>
           </tr>
         {% empty %}

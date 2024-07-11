@@ -19,9 +19,11 @@
             <tbody>
                 {% for user in users %}
                     <tr>
-                        <td>{{ user.username }}</td>
+                        <td>{{ user.username }} {% if user.is_staff %}(Admin){% endif %}</td>
                         <td>
-                            <a href="#" onclick="openDeleteModal('user', {{ user.id }}, '{{ user.username }}')">Delete</a>
+                            <a href="#" onclick="openDeleteModal('user', {{ user.id }}, '{{ user.username }}')">
+                                <img src="{% static 'base/icon/trash-can.svg' %}" alt="Delete" class="delete-item-icon" />
+                            </a>
                         </td>
                     </tr>
                 {% empty %}

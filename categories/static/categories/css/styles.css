@@ -5,3 +5,12 @@
 .subcategory-table.show {
     display: table;
 }
+
+.subcategories-actions a {
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+.subcategories-global-actions {
+    margin-top: 20px;
+}

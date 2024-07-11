@@ -79,7 +79,7 @@ nav {
     border-radius: 50%;
     width: 50px;
     height: 50px;
-    font-size: 1.5rem;
+    font-size: 2rem;
     cursor: pointer;
     position: fixed;
     bottom: 20px;
@@ -217,19 +217,21 @@ nav {
     content: '';
     position: absolute;
     top: 50%;
-    right: 22px;
+    right: 19px;
     transform: translateY(-50%);
     pointer-events: none;
-    width: 0;
-    height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 5px solid #888;
-    z-index: 1;
+    width: 16px;
+    height: 16px;
+    background: url("/static/base/icon/chevron-down.svg") no-repeat center;
+    background-size: contain;
 }
 
 .form-select-container .form-select.error {
     border-color: #ff0000;
+}
+
+.modal-container p {
+    margin-bottom: 1rem;
 }
 
 /* Button */
@@ -364,8 +366,29 @@ table tr:nth-child(even) {
     background-color: #4c7c85;
 }
 
-.subcategories-actions {
-    margin-top: 20px;
+.delete-item-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.show-subcategories-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.create-item-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.pay-bill-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.actions a {
+    text-decoration: none;
+    margin-right: 10px;
 }
 
 /* =========== WELCOME =========== */

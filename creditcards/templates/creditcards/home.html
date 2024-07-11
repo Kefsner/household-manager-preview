@@ -34,10 +34,14 @@
                         <td>R$ {{ creditcard.remaining_limit }}</td>
                         <td>
                             R$ {{ creditcard.next_bill_amount }} on {{ creditcard.next_due_date }}
-                            <a href="#" onclick="openPayCreditCardModal({{ creditcard.id }}, '{{ creditcard.name }}')">Pay Bill</a>
                         </td>
-                        <td>
-                            <a href="#" onclick="openDeleteModal('creditcard', {{ creditcard.id }}, '{{ creditcard.name }}')">Delete</a>
+                        <td class="actions">
+                            <a href="#" onclick="openPayCreditCardModal({{ creditcard.id }}, '{{ creditcard.name }}')">
+                                <img src="{% static 'base/icon/pay.svg' %}" alt="Pay Bill" class="pay-bill-icon" />
+                            </a>
+                            <a href="#" onclick="openDeleteModal('creditcard', {{ creditcard.id }}, '{{ creditcard.name }}')">
+                                <img src="{% static 'base/icon/trash-can.svg' %}" alt="Delete" class="delete-item-icon" />
+                            </a>
                         </td>
                     </tr>
                 {% empty %}
@@ -92,7 +96,7 @@
     <div class="modal-container" id="pay-creditcard-modal">
         <form id="pay-creditcard-form" method="POST">
         <h2>Pay Bill</h2>
-        <p>Are you sure you want to pay the bill of <strong id="pay-creditcard-name"></strong>?</p>
+        <p>Paying bill for the creditcard <strong id="pay-creditcard-name"></strong>?</p>
             {% csrf_token %}
             <input type="hidden" name="creditcard" id="pay-creditcard-id">
             <div class="form-input-container form-element-container">

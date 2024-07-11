@@ -8,26 +8,39 @@ function openCreateSubcategoryModal(categoryId, categoryName) {
 }
 
 // ===== Toggle Subcategories table =====
-function toggleSubcategories(categoryId) {
-    const subcategories = document.getElementById(categoryId);
+function toggleSubcategories(subcategoryTableId) {
+    const subcategories = document.getElementById(subcategoryTableId);
     subcategories.classList.toggle('show');
+    updateEyeIcon(subcategoryTableId.split('-')[2]);
+}
+
+function updateEyeIcon(categoryId) {
+  const eyeIcon = document.getElementById(`show-subcategories-icon-${categoryId}`)
+  const subcategories = document.getElementById(`subcategory-table-${categoryId}`);
+  if (subcategories.classList.contains('show')) {
+    eyeIcon.src = '/static/base/icon/eye-slash.svg';
+  } else {
+    eyeIcon.src = '/static/base/icon/eye.svg';
+  }
 }
 
 // ===== Expand All Subcategories tables =====
 function expandAllSubcategories() {
-  console.log('expandAllSubcategories');
     const subcategories = document.querySelectorAll('.subcategory-table');
     subcategories.forEach((subcategory) => {
         subcategory.classList.add('show');
+        categoryId = subcategory.id.split('-')[2];
+        updateEyeIcon(categoryId);
     });
 }
 
 // ===== Collapse All Subcategories tables =====
 function collapseAllSubcategories() {
-  console.log('collapseAllSubcategories');
     const subcategories = document.querySelectorAll('.subcategory-table');
     subcategories.forEach((subcategory) => {
         subcategory.classList.remove('show');
+        categoryId = subcategory.id.split('-')[2];
+        updateEyeIcon(categoryId);
     });
 }
 
