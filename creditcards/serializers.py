@@ -132,7 +132,6 @@ class PayCreditCardSerializer:
         self.validate_amount()
         self.validate_account()
         self.validated_data = {
-            'creditcard': self.creditcard,
             'amount': self.amount,
             'account': self.account
         }
