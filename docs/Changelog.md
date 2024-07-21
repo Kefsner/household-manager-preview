@@ -1,0 +1,1 @@
+Keep a running log of changes, improvements, and fixes in each version.

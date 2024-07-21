@@ -1,0 +1,1 @@
+Detailed user manual, including how to use all features.

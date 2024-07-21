@@ -1,52 +1,68 @@
-# House Management App
+# Household Manager
 
 ## Overview
-House Management is a comprehensive web application designed to streamline and enhance the day-to-day management of household activities. This application offers a variety of tools to handle finances, create shopping lists, store important documents, and much more, all personalized to each household's unique needs.
+Household Manager is a robust web application designed to efficiently manage household activities. It provides tools to oversee finances, organize shopping lists, securely store documents, and more, tailored to meet the unique needs of each household.
 
-### Features
-- **Finance Management**: Track incomes, expenses, credit card statements, and view financial summaries through interactive dashboards.
-- **Shopping List Management**: Create and manage shopping lists, record purchase details, and analyze shopping habits.
-- **AI-Enhanced Tools**: Utilize AI algorithms for predictive analysis, like forecasting shopping list costs and recommending frequent purchases.
-- **Multi-user Support**: Multiple users can manage a single household's activities, allowing for collaborative house management.
-- **Document Storage**: Securely store and organize important household documents.
-- **Task Management**: Keep track of household tasks with a to-do list feature.
-- Additional features in planning include bill management, note-taking, and more.
+### Features in V1.0
+- **User Authentication**: Securely register and log in to access personalized household management tools.
+- **Finance Management**: Track incomes and expenses, manage credit card transactions, and derive financial insights through interactive dashboards.
+- **Multi-user Support**: Allows multiple users to collaboratively manage household activities, enhancing cooperative planning and tracking.
+- **Data Visualization**: Uses Chart.js for dynamic and responsive financial charts and graphs.
+
+### Planned Future Features
+- **Shopping List Management**: Create, manage, and analyze shopping lists to monitor shopping habits and predict future costs.
+- **AI-Enhanced Tools**: Utilize AI-driven predictions to forecast shopping expenses and suggest frequent purchases.
+- **Document Storage**: Secure options for storing and organizing important household documents.
+- **Mobile App Integration**: Develop a mobile application for accessible household management on-the-go.
+- **Task Management**: Manage daily tasks efficiently with a comprehensive to-do list feature.
+- **Bill Management**: Track and manage regular household bills such as utilities.
+- **Note-Taking Capabilities**: Implement enhanced note-taking features, including voice-to-text and image recognition functionalities.
+- **Multi Language Support**: Enable multi-language support for global accessibility.
 
 ## Technologies
-- **Frontend/Backend**: Django
-- **Database**: PostgreSQL
-- **AI/ML**: Python libraries (scikit-learn, TensorFlow)
-- **Data Visualization**: Chart.js / D3.js
-- **Deployment**: Google Cloud Platform
+- **Frontend/Backend**: Developed using Django.
+- **Database**: Currently uses SQLite3, with plans to transition to PostgreSQL for production.
+- **Data Visualization**: Implemented with Chart.js.
 
 ## Getting Started
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
-What things you need to install the software and how to install them:
-- Python3.12
-- [Any other prerequisites]
+- Python 3.12 or higher
+- Django 5.0.6
+- Dependencies as listed in the `requirements.txt` file.
 
-### Installing
-A step-by-step series of examples that tell you how to get a development environment running:
-
+### Installation
+To install Household Manager for local development:
 1. Clone the repository:
-   ```
+   ```bash
    git clone https://github.com/Kefsner/household-manager.git
    ```
 2. Navigate to the project directory:
-   ```
+   ```bash
    cd household-manager
    ```
-3. [Additional installation steps]
+3. Install the required Python packages:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 ### Running the Application
-Instructions on how to run the application locally:
-1. [Steps to start the backend]
-2. [Steps to start the frontend]
+To run Household Manager locally:
+1. Apply the database migrations:
+   ```bash
+   python manage.py migrate
+   ```
+2. Start the Django development server:
+   ```bash
+   python manage.py runserver
+   ```
+3. Access the application at `http://localhost:8000`.
 
-## Authors
-- **Kesley Raimundo** - *Initial work* - [Kefsner](https://github.com/Kefsner)
+Future deployment plans include hosting the application on a live server to enable remote access and developing a mobile app for enhanced accessibility.
+
+## Contributors
+- **Kesley Raimundo** - *Initial Development* - [Kefsner](https://github.com/Kefsner)
 
 ## License
-All rights reserved - see the [LICENSE.md](LICENSE.md) file for details.
+This project is protected under proprietary rights. For more details, see the [LICENSE.md](LICENSE.md) file.
