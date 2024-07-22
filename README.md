@@ -18,6 +18,7 @@ Household Manager is a robust web application designed to efficiently manage hou
 - **Bill Management**: Track and manage regular household bills such as utilities.
 - **Note-Taking Capabilities**: Implement enhanced note-taking features, including voice-to-text and image recognition functionalities.
 - **Multi Language Support**: Enable multi-language support for global accessibility.
+- **Import Bank Statements**: Allow users to import bank statements for automated financial tracking.
 
 ## Technologies
 - **Frontend/Backend**: Developed using Django.
