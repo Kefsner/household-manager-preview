@@ -1,1 +1,0 @@
-Technical documentation for developers, including codebase overview, API documentation, and contrribution guidelines.

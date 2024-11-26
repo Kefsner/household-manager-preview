@@ -1,1 +1,0 @@
-Forr adminisstratores, details on deployment, maintenance, and advanced configurations.

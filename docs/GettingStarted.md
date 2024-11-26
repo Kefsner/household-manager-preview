@@ -1,1 +1,0 @@
-Instructions for initial setup and quick starrt guide.
